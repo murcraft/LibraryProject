@@ -13,7 +13,6 @@ public class Employer implements Serializable {
 	private String phoneNumber;
 	private String numOfReadTicket;
 	private Date dateOfRegistration;
-	private  Date dateOfVisit;
 	
 	public Employer() {
 	}
@@ -26,14 +25,12 @@ public class Employer implements Serializable {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
-	public Employer(String name, String surname, boolean isReader, String phoneNumber, String numOfReadTicket,
-			Date dateOfVisit) {
+	public Employer(String name, String surname, boolean isReader, String phoneNumber, String numOfReadTicket) {
 		this.name = name;
 		this.surname = surname;
 		this.isReader = isReader;
 		this.phoneNumber = phoneNumber;
 		this.numOfReadTicket = numOfReadTicket;
-		this.dateOfVisit = dateOfVisit;
 	}
 
 	public String getName() {
@@ -84,14 +81,6 @@ public class Employer implements Serializable {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
-	public Date getDateOfVisit() {
-		return dateOfVisit;
-	}
-
-	public void setDateOfVisit(Date dateOfVisit) {
-		this.dateOfVisit = dateOfVisit;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -138,14 +127,7 @@ public class Employer implements Serializable {
 	@Override
 	public String toString() {
 		return "Employer [name=" + name + ", surname=" + surname + ", isReader=" + isReader + ", phoneNumber="
-				+ phoneNumber + ", numOfReadTicket=" + numOfReadTicket + ", dateOfRegistration=" + dateOfRegistration
-				+ ", dateOfVisit=" + dateOfVisit + "]";
+				+ phoneNumber + ", numOfReadTicket=" + numOfReadTicket + ", dateOfRegistration=" + dateOfRegistration + "]";
 	}
-	
-	
-
-
-	
-	
 
 }
