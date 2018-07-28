@@ -5,8 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <properties>
-     <maven.compiler.sourse>10</maven.compiler.sourse>
-     <maven.compiler.target>10</maven.compiler.target>
+    <maven.compiler.source>10</maven.compiler.source>
+    <maven.compiler.target>10</maven.compiler.target>
   </properties>
   
   <dependencies>
@@ -30,9 +30,9 @@
     </dependency>
   
   	<dependency>
-	  <groupId>mysql</groupId>
-	  <artifactId>mysql-connector-java</artifactId>
-	  <version>8.0.11</version>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.11</version>
 	</dependency>
 	
 	<dependency>
