@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.htp.kyzniatsova.dao.ReaderDao;
-import by.htp.kyzniatsova.domain.entity.Employer;
+import by.htp.kyzniatsova.domain.entity.Employee;
 
 public class ReaderDaoImpl implements ReaderDao {
 	
@@ -22,10 +22,10 @@ public class ReaderDaoImpl implements ReaderDao {
 	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.employee where id_employee = ?";
 	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.employee SET id_employee = ?, Name = ?, Surname = ?, ReadTicket = ?, PhoneNumber = ?, Regist_date = ? where id_employee = ?";
 
-	private List <Employer> books = new ArrayList<Employer>();
+	private List <Employee> books = new ArrayList<Employee>();
 
-	public Employer read(int id) {
-		Employer book = null;
+	public Employee read(int id) {
+		Employee book = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
@@ -44,13 +44,13 @@ public class ReaderDaoImpl implements ReaderDao {
 		return book;
 	}
 
-	public List<Employer> list() {
-		List<Employer> books = new ArrayList<Employer>();
+	public List<Employee> list() {
+		List<Employee> books = new ArrayList<Employee>();
 		return books;
 	}
 	
 	@Override
-	public int insert(Employer book) {
+	public int insert(Employee book) {
 		int a = -1;
 		boolean isExistId = false;
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
@@ -85,16 +85,16 @@ public class ReaderDaoImpl implements ReaderDao {
 		return a;
 	}
 
-	public void delete(Employer book) {
+	public void delete(Employee book) {
 	
 	}
 
-	public void update(Employer book) {
+	public void update(Employee book) {
 		
 	}
 
-	public Employer readAll() {
-		Employer book = null;
+	public Employee readAll() {
+		Employee book = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			
@@ -112,12 +112,12 @@ public class ReaderDaoImpl implements ReaderDao {
 		return book;
 	}
 
-	public List<Employer> getBooks() {
+	public List<Employee> getBooks() {
 		return null;
 	}
 	
-	private Employer buildEmployer(ResultSet rs) throws SQLException {
-		Employer book = new Employer();
+	private Employee buildEmployer(ResultSet rs) throws SQLException {
+		Employee book = new Employee();
 		book.setId(rs.getInt("id_book"));
 		book.setTitle(rs.getString("Title"));
 		book.setDate(rs.getDate("Prod_year"));

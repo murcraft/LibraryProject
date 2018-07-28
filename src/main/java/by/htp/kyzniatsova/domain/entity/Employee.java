@@ -3,10 +3,11 @@ package by.htp.kyzniatsova.domain.entity;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class Employer implements Serializable {
+public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 3684975853056735122L;
-
+	
+	private int id;
 	private String name;
 	private String surname;
 	private boolean isReader;
@@ -14,10 +15,11 @@ public class Employer implements Serializable {
 	private String numOfReadTicket;
 	private Date dateOfRegistration;
 	
-	public Employer() {
+	public Employee() {
 	}
 
-	public Employer(String name, String surname, boolean isReader, String phoneNumber, Date dateOfRegistration) {
+	public Employee(int id, String name, String surname, boolean isReader, String phoneNumber, Date dateOfRegistration) {
+		this.setId(id);
 		this.name = name;
 		this.surname = surname;
 		this.isReader = isReader;
@@ -25,12 +27,20 @@ public class Employer implements Serializable {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
-	public Employer(String name, String surname, boolean isReader, String phoneNumber, String numOfReadTicket) {
+	public Employee(String name, String surname, boolean isReader, String phoneNumber, String numOfReadTicket) {
 		this.name = name;
 		this.surname = surname;
 		this.isReader = isReader;
 		this.phoneNumber = phoneNumber;
 		this.numOfReadTicket = numOfReadTicket;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -85,6 +95,9 @@ public class Employer implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
+		result = prime * result + id;
+		result = prime * result + (isReader ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((numOfReadTicket == null) ? 0 : numOfReadTicket.hashCode());
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
@@ -100,7 +113,16 @@ public class Employer implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employer other = (Employer) obj;
+		Employee other = (Employee) obj;
+		if (dateOfRegistration == null) {
+			if (other.dateOfRegistration != null)
+				return false;
+		} else if (!dateOfRegistration.equals(other.dateOfRegistration))
+			return false;
+		if (id != other.id)
+			return false;
+		if (isReader != other.isReader)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
