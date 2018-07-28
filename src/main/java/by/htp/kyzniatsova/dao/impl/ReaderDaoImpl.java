@@ -14,6 +14,13 @@ import by.htp.kyzniatsova.dao.ReaderDao;
 import by.htp.kyzniatsova.domain.entity.Employer;
 
 public class ReaderDaoImpl implements ReaderDao {
+	
+	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT Name, Surname, ReadTicket, PhoneNumber, REgist_date FROM library.employee e WHERE e.id_employee = ?";
+	private static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM library.employee;";
+	private static final String INSERT_EMPLOYEE = "INSERT INTO library.employee(id_employee, Name, Surname, ReadTicket, PhoneNumber, Regist_date) VALUES(?,?,?,?,?);";
+	private static final String SELECT_ID_EMPLOYEE = "SELECT * from library.employee";
+	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.employee where id_employee = ?";
+	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.employee SET id_employee = ?, Name = ?, Surname = ?, ReadTicket = ?, PhoneNumber = ?, Regist_date = ? where id_employee = ?";
 
 	private List <Employer> books = new ArrayList<Employer>();
 
@@ -21,13 +28,13 @@ public class ReaderDaoImpl implements ReaderDao {
 		Employer book = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_ID);
+			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
 			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 	
 			if(rs.next()) {
-				book = buildBook(rs);
+				book = buildEmployer(rs);
 			}
 			
 			
@@ -41,12 +48,13 @@ public class ReaderDaoImpl implements ReaderDao {
 		List<Employer> books = new ArrayList<Employer>();
 		return books;
 	}
-
-	public int insert(Book book) {
+	
+	@Override
+	public int insert(Employer book) {
 		int a = -1;
 		boolean isExistId = false;
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-			PreparedStatement psSel = connection.prepareStatement(SELECT_ID_BOOK);
+			PreparedStatement psSel = connection.prepareStatement(SELECT_ID_EMPLOYEE);
 			
 			ResultSet rsAll = psSel.executeQuery();
 			int id = book.getId();
@@ -59,7 +67,7 @@ public class ReaderDaoImpl implements ReaderDao {
 			}
 			
 			if(isExistId == false) {
-				PreparedStatement ps = connection.prepareStatement(INSERT_BOOK);
+				PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
 			
 				ps.setInt(1, book.getId());
 				ps.setString(2, book.getTitle());
@@ -90,7 +98,7 @@ public class ReaderDaoImpl implements ReaderDao {
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			
-			PreparedStatement psAll = connection.prepareStatement(SELECT_ALL_BOOK);
+			PreparedStatement psAll = connection.prepareStatement(SELECT_ALL_EMPLOYEES);
 			ResultSet rsAll = psAll.executeQuery();
 			
 			while(rsAll.next()) {
@@ -115,5 +123,7 @@ public class ReaderDaoImpl implements ReaderDao {
 		book.setDate(rs.getDate("Prod_year"));
 		return book;
 	}
+
+	
 
 }
