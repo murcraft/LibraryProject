@@ -22,10 +22,10 @@ public class ReaderDaoImpl implements ReaderDao {
 	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.employee where id_employee = ?";
 	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.employee SET id_employee = ?, Name = ?, Surname = ?, ReadTicket = ?, PhoneNumber = ?, Regist_date = ? where id_employee = ?";
 
-	private List <Employee> books = new ArrayList<Employee>();
+	private List <Employee> employees = new ArrayList<Employee>();
 
 	public Employee read(int id) {
-		Employee book = null;
+		Employee employee = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
@@ -34,33 +34,33 @@ public class ReaderDaoImpl implements ReaderDao {
 			ResultSet rs = ps.executeQuery();
 	
 			if(rs.next()) {
-				book = buildEmployer(rs);
+				employee = buildEmployer(rs);
 			}
 			
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return book;
+		return employee;
 	}
 
 	public List<Employee> list() {
-		List<Employee> books = new ArrayList<Employee>();
-		return books;
+		List<Employee> employees = new ArrayList<Employee>();
+		return employees;
 	}
 	
 	@Override
-	public int insert(Employee book) {
+	public int insert(Employee employee) {
 		int a = -1;
 		boolean isExistId = false;
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement psSel = connection.prepareStatement(SELECT_ID_EMPLOYEE);
 			
 			ResultSet rsAll = psSel.executeQuery();
-			int id = book.getId();
+			int id = employee.getId();
 			while(rsAll.next()) {
-				if(rsAll.getInt("id_book") == id) {
-					System.out.println("The id is existing in database");
+				if(rsAll.getInt("id_employee") == id) {
+					System.out.println("This id is existing in database");
 					isExistId = true;
 					break;
 				}
@@ -69,12 +69,15 @@ public class ReaderDaoImpl implements ReaderDao {
 			if(isExistId == false) {
 				PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
 			
-				ps.setInt(1, book.getId());
-				ps.setString(2, book.getTitle());
-				ps.setDate(3, book.getDate());
+				ps.setInt(1, employee.getId());
+				ps.setString(2, employee.getName());
+				ps.setString(3, employee.getSurname());
+				ps.setString(4, employee.getNumOfReadTicket());
+				ps.setString(5, employee.getPhoneNumber());
+				ps.setDate(6, employee.getDateOfRegistration());
 		
 				ps.executeUpdate();
-				System.out.println(book + " was inserted");
+				System.out.println(employee + " was inserted");
 		
 				return a;
 			}
@@ -85,16 +88,16 @@ public class ReaderDaoImpl implements ReaderDao {
 		return a;
 	}
 
-	public void delete(Employee book) {
+	public void delete(Employee employee) {
 	
 	}
 
-	public void update(Employee book) {
+	public void update(Employee employee) {
 		
 	}
 
 	public Employee readAll() {
-		Employee book = null;
+		Employee employee = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			
@@ -102,26 +105,29 @@ public class ReaderDaoImpl implements ReaderDao {
 			ResultSet rsAll = psAll.executeQuery();
 			
 			while(rsAll.next()) {
-				book = buildEmployer(rsAll);
-				books.add(book);
+				employee = buildEmployer(rsAll);
+				employees.add(employee);
 			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return book;
+		return employee;
 	}
 
 	public List<Employee> getBooks() {
 		return null;
 	}
 	
-	private Employee buildEmployer(ResultSet rs) throws SQLException {
-		Employee book = new Employee();
-		book.setId(rs.getInt("id_book"));
-		book.setTitle(rs.getString("Title"));
-		book.setDate(rs.getDate("Prod_year"));
-		return book;
+	private Employee buildEmployer(ResultSet rs) throws SQLException {//id_employee, Name, Surname, ReadTicket, PhoneNumber, Regist_date
+		Employee employee = new Employee();
+		employee.setId(rs.getInt("id_employee"));
+		employee.setName(rs.getString("Name"));
+		employee.setSurname(rs.getString("Surname"));
+		employee.setNumOfReadTicket(rs.getString("ReadTicket"));
+		employee.setPhoneNumber(rs.getString("PhoneNumber"));
+		employee.setDateOfRegistration(rs.getDate("Regist_date"));
+		return employee;
 	}
 
 	
