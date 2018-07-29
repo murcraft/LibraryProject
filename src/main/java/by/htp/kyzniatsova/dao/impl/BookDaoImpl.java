@@ -15,30 +15,25 @@ import by.htp.kyzniatsova.domain.entity.Book;
 
 public class BookDaoImpl implements BookDao {
 	
-	private static final String SELECT_BOOK_BY_ID = "SELECT b.Title, a.Name, a.Surname, a.Birthday FROM Book b JOIN Author a on a.id_author = b.id_author WHERE b.id_book = ?";
+	private static final String SELECT_BOOK_BY_ID = "SELECT * FROM Book b WHERE b.id_book = ?";
 	private static final String SELECT_ALL_BOOK = "SELECT * FROM Book b JOIN Author a on a.id_author = b.id_author";
 	private static final String INSERT_BOOK = "INSERT INTO Book(id_book, Title, Prod_year) VALUES(?,?,?);";
-	private static final String SELECT_ID_BOOK = "SELECT * from Book ";
 	private static final String DELETE_ID_BOOK = "DELETE from Book where id_book = ?";
-	private static final String UPDATE_ID_BOOK = "UPDATE Book SET id_book = ?, Title = ?, Prod_year = ? where id_book = ?";
+	private static final String UPDATE_ID_BOOK = "UPDATE Book SET Title = ?, Prod_year = ? where id_book = ?";
 
 	
 	private List <Book> books = new ArrayList<Book>();
 
 	public Book read(int id) {
 		Book book = null;
-		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_ID);
-			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 	
 			if(rs.next()) {
 				book = buildBook(rs);
 			}
-			
-			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,47 +45,49 @@ public class BookDaoImpl implements BookDao {
 		return books;
 	}
 
-	public int insert(Book book) {
-		int a = -1;
-		boolean isExistId = false;
+	public boolean insert(Book book) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-			PreparedStatement psSel = connection.prepareStatement(SELECT_ID_BOOK);
+			PreparedStatement ps = connection.prepareStatement(INSERT_BOOK);
+			ps.setInt(1, book.getId());
+			ps.setString(2, book.getTitle());
+			ps.setString(3, book.getProductYear());
 			
-			ResultSet rsAll = psSel.executeQuery();
-			int id = book.getId();
-			while(rsAll.next()) {
-				if(rsAll.getInt("id_book") == id) {
-					System.out.println("The id is existing in database");
-					isExistId = true;
-					break;
-				}
-			}
-			
-			if(isExistId == false) {
-				PreparedStatement ps = connection.prepareStatement(INSERT_BOOK);
-			
-				ps.setInt(1, book.getId());
-				ps.setString(2, book.getTitle());
-				ps.setDate(3, book.getDate());
-		
-				ps.executeUpdate();
+			if(ps.executeUpdate() == 1) {
 				System.out.println(book + " was inserted");
-		
-				return a;
+				return true;
 			}
-			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return a;
+		return false;
 	}
 
-	public void delete(Book book) {
-	
+	public boolean delete(Book book) {
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
+			PreparedStatement ps = connection.prepareStatement(DELETE_ID_BOOK);
+			ps.setInt(1, book.getId());
+			if(ps.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return false;
 	}
 
-	public void update(Book book) {
-		
+	public boolean update(Book book) {
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
+			PreparedStatement ps = connection.prepareStatement(UPDATE_ID_BOOK);
+			ps.setString(1, book.getTitle());
+			ps.setString(2, book.getProductYear());
+			ps.setInt(3, book.getId());
+			if(ps.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public Book readAll() {
@@ -120,7 +117,7 @@ public class BookDaoImpl implements BookDao {
 		Book book = new Book();
 		book.setId(rs.getInt("id_book"));
 		book.setTitle(rs.getString("Title"));
-		book.setDate(rs.getDate("Prod_year"));
+		book.setProductYear(rs.getString("Prod_year"));
 		return book;
 	}
 

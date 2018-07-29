@@ -9,16 +9,17 @@ public class Book implements Serializable {
 	private int id;
 	private String title;
 	private String pages;
-	private Date date;
+	private String productYear;
 	
 	public Book() {
 
 	}
 	
-	public Book(int id, String title, String pages) {
+	public Book(int id, String title, String pages, String date) {
 		this.id = id;
 		this.title = title;
 		this.pages = pages;
+		this.productYear = date;
 	}
 	
 	public int getId() {
@@ -45,18 +46,19 @@ public class Book implements Serializable {
 		this.pages = pages;
 	}
 	
-	public Date getDate() {
-		return date;
+	public String getProductYear() {
+		return productYear;
 	}
 	
-	public void setDate(Date date) {
-		this.date = date;
+	public void setProductYear(String productYear) {
+		this.productYear = productYear;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((productYear == null) ? 0 : productYear.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((pages == null) ? 0 : pages.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -72,6 +74,11 @@ public class Book implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
+		if (productYear == null) {
+			if (other.productYear != null)
+				return false;
+		} else if (!productYear.equals(other.productYear))
+			return false;
 		if (id != other.id)
 			return false;
 		if (pages == null) {
@@ -89,7 +96,9 @@ public class Book implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", pages=" + pages + ", date=" + date + "]";
+		return "Book [id=" + id + ", title=" + title + ", pages=" + pages + ", date=" + productYear + "]";
 	}
+
+	
 	
 }
