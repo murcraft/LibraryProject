@@ -8,10 +8,8 @@ public interface BookDao {
 	
 	Book read(int id);
 	List<Book> list();
-	int insert(Book book);
-	void delete(Book book);
-	void update(Book book);
+	boolean insert(Book book);
+	boolean delete(Book book);
+	boolean update(Book book);
 	Book readAll();
-	List<Book> getBooks();
-
 }
