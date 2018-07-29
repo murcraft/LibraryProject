@@ -7,40 +7,29 @@ public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 3684975853056735122L;
 	
-	private int id;
+	private int num_ticket;
 	private String name;
 	private String surname;
-	private boolean isReader;
-	private String phoneNumber;
-	private String numOfReadTicket;
-	private Date dateOfRegistration;
+	private String phone;
+	private Date dateOfRegistr;
 	
 	public Employee() {
 	}
 
-	public Employee(int id, String name, String surname, boolean isReader, String phoneNumber, Date dateOfRegistration) {
-		this.setId(id);
+	public Employee(int num_ticket, String name, String surname, String phone, Date dateOfRegistr) {
+		this.num_ticket = num_ticket;
 		this.name = name;
 		this.surname = surname;
-		this.isReader = isReader;
-		this.phoneNumber = phoneNumber;
-		this.dateOfRegistration = dateOfRegistration;
+		this.phone = phone;
+		this.dateOfRegistr = dateOfRegistr;
 	}
 
-	public Employee(String name, String surname, boolean isReader, String phoneNumber, String numOfReadTicket) {
-		this.name = name;
-		this.surname = surname;
-		this.isReader = isReader;
-		this.phoneNumber = phoneNumber;
-		this.numOfReadTicket = numOfReadTicket;
+	public int getNum_ticket() {
+		return num_ticket;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setNum_ticket(int num_ticket) {
+		this.num_ticket = num_ticket;
 	}
 
 	public String getName() {
@@ -59,48 +48,30 @@ public class Employee implements Serializable {
 		this.surname = surname;
 	}
 
-	public boolean isReader() {
-		return isReader;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setReader(boolean isReader) {
-		this.isReader = isReader;
+	public void setPhoneNumber(String phone) {
+		this.phone = phone;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public Date getDateOfRegistr() {
+		return dateOfRegistr;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getNumOfReadTicket() {
-		return numOfReadTicket;
-	}
-
-	public void setNumOfReadTicket(String numOfReadTicket) {
-		this.numOfReadTicket = numOfReadTicket;
-	}
-
-	public Date getDateOfRegistration() {
-		return dateOfRegistration;
-	}
-
-	public void setDateOfRegistration(Date dateOfRegistration) {
-		this.dateOfRegistration = dateOfRegistration;
+	public void setDateOfRegistration(Date dateOfRegistr) {
+		this.dateOfRegistr = dateOfRegistr;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dateOfRegistration == null) ? 0 : dateOfRegistration.hashCode());
-		result = prime * result + id;
-		result = prime * result + (isReader ? 1231 : 1237);
+		result = prime * result + ((dateOfRegistr == null) ? 0 : dateOfRegistr.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((numOfReadTicket == null) ? 0 : numOfReadTicket.hashCode());
-		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + num_ticket;
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		return result;
 	}
@@ -114,29 +85,22 @@ public class Employee implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Employee other = (Employee) obj;
-		if (dateOfRegistration == null) {
-			if (other.dateOfRegistration != null)
+		if (dateOfRegistr == null) {
+			if (other.dateOfRegistr != null)
 				return false;
-		} else if (!dateOfRegistration.equals(other.dateOfRegistration))
-			return false;
-		if (id != other.id)
-			return false;
-		if (isReader != other.isReader)
+		} else if (!dateOfRegistr.equals(other.dateOfRegistr))
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (numOfReadTicket == null) {
-			if (other.numOfReadTicket != null)
-				return false;
-		} else if (!numOfReadTicket.equals(other.numOfReadTicket))
+		if (num_ticket != other.num_ticket)
 			return false;
-		if (phoneNumber == null) {
-			if (other.phoneNumber != null)
+		if (phone == null) {
+			if (other.phone != null)
 				return false;
-		} else if (!phoneNumber.equals(other.phoneNumber))
+		} else if (!phone.equals(other.phone))
 			return false;
 		if (surname == null) {
 			if (other.surname != null)
@@ -148,8 +112,10 @@ public class Employee implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Employer [name=" + name + ", surname=" + surname + ", isReader=" + isReader + ", phoneNumber="
-				+ phoneNumber + ", numOfReadTicket=" + numOfReadTicket + ", dateOfRegistration=" + dateOfRegistration + "]";
+		return "Employee [num_ticket=" + num_ticket + ", name=" + name + ", surname=" + surname + ", phone=" + phone
+				+ ", dateOfRegistr=" + dateOfRegistr + "]";
 	}
+
+	
 
 }

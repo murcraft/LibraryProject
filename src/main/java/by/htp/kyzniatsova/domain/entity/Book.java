@@ -1,7 +1,6 @@
 package by.htp.kyzniatsova.domain.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 public class Book implements Serializable {
 

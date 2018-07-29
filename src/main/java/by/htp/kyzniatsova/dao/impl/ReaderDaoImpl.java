@@ -15,121 +15,107 @@ import by.htp.kyzniatsova.domain.entity.Employee;
 
 public class ReaderDaoImpl implements ReaderDao {
 	
-	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT Name, Surname, ReadTicket, PhoneNumber, REgist_date FROM library.employee e WHERE e.id_employee = ?";
-	private static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM library.employee;";
-	private static final String INSERT_EMPLOYEE = "INSERT INTO library.employee(id_employee, Name, Surname, ReadTicket, PhoneNumber, Regist_date) VALUES(?,?,?,?,?);";
-	private static final String SELECT_ID_EMPLOYEE = "SELECT * from library.employee";
-	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.employee where id_employee = ?";
-	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.employee SET id_employee = ?, Name = ?, Surname = ?, ReadTicket = ?, PhoneNumber = ?, Regist_date = ? where id_employee = ?";
+	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT Num_ticket, Name, Surname, Reg_date, Phone FROM library.readers r WHERE r.Num_ticket = ?";
+	private static final String SELECT_LIST_EMPLOYEE = "SELECT * FROM library.readers r WHERE r.Num_ticket = ?";
+	private static final String INSERT_EMPLOYEE = "INSERT INTO library.readers(Name, Surname, Reg_date, Phone) VALUES(?,?,?,?);";
+	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.reader where Num_ticket = ?";
+	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.readers SET id_employee = ?, Name = ?, Surname = ?, Reg_date = ?, Phone = ? where Num_ticket = ?";
 
-	private List <Employee> employees = new ArrayList<Employee>();
-
+	@Override
 	public Employee read(int id) {
 		Employee employee = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
-			
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
-	
 			if(rs.next()) {
-				employee = buildEmployer(rs);
+				employee = buildEmployee(rs);
 			}
-			
-			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return employee;
 	}
 
+	@Override
 	public List<Employee> list() {
-		List<Employee> employees = new ArrayList<Employee>();
-		return employees;
+		List<Employee> listEmployee = new ArrayList<Employee>();
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = connection.prepareStatement(SELECT_LIST_EMPLOYEE);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				listEmployee.add(buildEmployee(rs));
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return listEmployee;
 	}
 	
 	@Override
-	public int insert(Employee employee) {
-		int a = -1;
-		boolean isExistId = false;
-		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-			PreparedStatement psSel = connection.prepareStatement(SELECT_ID_EMPLOYEE);
+	public boolean insert(Employee employee) {
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
+			ps.setString(1, employee.getName());
+			ps.setString(2, employee.getSurname());
+			ps.setDate(3, employee.getDateOfRegistr());
+			ps.setString(4, employee.getPhone());
+			if (ps.executeUpdate() == 1) {
+				return true;
+			}			
+		} catch (SQLException e) {
 			
-			ResultSet rsAll = psSel.executeQuery();
-			int id = employee.getId();
-			while(rsAll.next()) {
-				if(rsAll.getInt("id_employee") == id) {
-					System.out.println("This id is existing in database");
-					isExistId = true;
-					break;
-				}
-			}
-			
-			if(isExistId == false) {
-				PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
-			
-				ps.setInt(1, employee.getId());
-				ps.setString(2, employee.getName());
-				ps.setString(3, employee.getSurname());
-				ps.setString(4, employee.getNumOfReadTicket());
-				ps.setString(5, employee.getPhoneNumber());
-				ps.setDate(6, employee.getDateOfRegistration());
-		
-				ps.executeUpdate();
-				System.out.println(employee + " was inserted");
-		
-				return a;
-			}
-			
-		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return a;
+		return false;
 	}
 
-	public void delete(Employee employee) {
-	
-	}
-
-	public void update(Employee employee) {
-		
-	}
-
-	public Employee readAll() {
-		Employee employee = null;
-		
+	public boolean delete(Employee employee) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-			
-			PreparedStatement psAll = connection.prepareStatement(SELECT_ALL_EMPLOYEES);
-			ResultSet rsAll = psAll.executeQuery();
-			
-			while(rsAll.next()) {
-				employee = buildEmployer(rsAll);
-				employees.add(employee);
+			PreparedStatement ps = connection.prepareStatement(DELETE_ID_EMPLOYEE);
+			ps.setInt(1, employee.getNum_ticket());
+			if (ps.executeUpdate() == 1) {
+				return true;
 			}
-			
-		} catch(SQLException e) {
+		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
-		return employee;
+		return false;
 	}
 
-	public List<Employee> getBooks() {
-		return null;
+	public boolean update(Employee employee) {
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
+			PreparedStatement ps = connection.prepareStatement(UPDATE_ID_EMPLOYEE);
+			ps.setString(1, employee.getName());
+			ps.setString(2, employee.getSurname());
+			ps.setDate(3, employee.getDateOfRegistr());
+			ps.setString(4, employee.getPhone());
+			ps.setInt(5, employee.getNum_ticket());
+			System.out.println(ps);
+			if (ps.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return false;
+		
 	}
 	
-	private Employee buildEmployer(ResultSet rs) throws SQLException {//id_employee, Name, Surname, ReadTicket, PhoneNumber, Regist_date
+	private Employee buildEmployee(ResultSet rs) throws SQLException {//id_employee, Name, Surname, ReadTicket, PhoneNumber, Regist_date
 		Employee employee = new Employee();
-		employee.setId(rs.getInt("id_employee"));
+		employee.setNum_ticket(rs.getInt("Num_ticket"));
 		employee.setName(rs.getString("Name"));
 		employee.setSurname(rs.getString("Surname"));
-		employee.setNumOfReadTicket(rs.getString("ReadTicket"));
 		employee.setPhoneNumber(rs.getString("PhoneNumber"));
 		employee.setDateOfRegistration(rs.getDate("Regist_date"));
 		return employee;
 	}
 
-	
+	public Employee getEmployee(ResultSet rs) throws SQLException {
+		return buildEmployee(rs);
+	}
 
 }
