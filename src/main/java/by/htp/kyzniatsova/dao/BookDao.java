@@ -2,7 +2,7 @@ package by.htp.kyzniatsova.dao;
 
 import java.util.List;
 
-import by.htp.kyzniatsova.domain.entity.Book;
+import by.htp.kyzniatsova.entity.Book;
 
 public interface BookDao {
 	

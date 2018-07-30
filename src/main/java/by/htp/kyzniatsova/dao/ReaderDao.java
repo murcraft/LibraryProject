@@ -2,7 +2,7 @@ package by.htp.kyzniatsova.dao;
 
 import java.util.List;
 
-import by.htp.kyzniatsova.domain.entity.Reader;
+import by.htp.kyzniatsova.entity.Reader;
 
 public interface ReaderDao {
 	

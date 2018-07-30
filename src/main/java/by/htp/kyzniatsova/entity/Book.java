@@ -1,4 +1,4 @@
-package by.htp.kyzniatsova.domain.entity;
+package by.htp.kyzniatsova.entity;
 
 import java.io.Serializable;
 

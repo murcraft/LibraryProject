@@ -8,7 +8,7 @@ import by.htp.kyzniatsova.console.ReaderConsole;
 import by.htp.kyzniatsova.controller.MainController;
 import by.htp.kyzniatsova.dao.ReaderDao;
 import by.htp.kyzniatsova.dao.impl.ReaderDaoImpl;
-import by.htp.kyzniatsova.domain.entity.Reader;
+import by.htp.kyzniatsova.entity.Reader;
 
 public class ReaderControllerImpl  implements MainController {
 	

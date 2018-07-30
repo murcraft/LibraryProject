@@ -4,7 +4,7 @@ import by.htp.kyzniatsova.console.ReaderConsole;
 import by.htp.kyzniatsova.controller.MainController;
 import by.htp.kyzniatsova.dao.BookDao;
 import by.htp.kyzniatsova.dao.impl.BookDaoImpl;
-import by.htp.kyzniatsova.domain.entity.Book;
+import by.htp.kyzniatsova.entity.Book;
 
 public class BookControllerImpl implements MainController {
 	private BookDao bookDao;

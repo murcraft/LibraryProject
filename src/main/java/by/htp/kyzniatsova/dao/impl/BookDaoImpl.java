@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.htp.kyzniatsova.dao.BookDao;
-import by.htp.kyzniatsova.domain.entity.Book;
+import by.htp.kyzniatsova.entity.Book;
 
 public class BookDaoImpl implements BookDao {
 	

@@ -1,10 +1,10 @@
 package by.htp.kyzniatsova.run;
 
+import by.htp.kyzniatsova.console.BookMenu;
 import by.htp.kyzniatsova.console.ConsoleMenu;
 import by.htp.kyzniatsova.console.ParentMenu;
 import by.htp.kyzniatsova.console.ReaderConsole;
-import by.htp.kyzniatsova.console.menu.BookMenu;
-import by.htp.kyzniatsova.console.menu.ReaderMenu;
+import by.htp.kyzniatsova.console.ReaderMenu;
 
 public class MainApp {
 

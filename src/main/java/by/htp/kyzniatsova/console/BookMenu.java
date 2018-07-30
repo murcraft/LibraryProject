@@ -1,7 +1,5 @@
-package by.htp.kyzniatsova.console.menu;
+package by.htp.kyzniatsova.console;
 
-import by.htp.kyzniatsova.console.ParentMenu;
-import by.htp.kyzniatsova.console.ReaderConsole;
 import by.htp.kyzniatsova.controller.BookController;
 
 public class BookMenu  extends ParentMenu {

@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import by.htp.kyzniatsova.dao.ReaderDao;
-import by.htp.kyzniatsova.domain.entity.Reader;
+import by.htp.kyzniatsova.entity.Reader;
 
 public class ReaderDaoImpl implements ReaderDao {
 	
