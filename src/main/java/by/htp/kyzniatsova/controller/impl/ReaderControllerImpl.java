@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import by.htp.kyzniatsova.console.ReaderVisits;
+import by.htp.kyzniatsova.console.ReaderConsole;
 import by.htp.kyzniatsova.controller.MainController;
 import by.htp.kyzniatsova.dao.ReaderDao;
 import by.htp.kyzniatsova.dao.impl.ReaderDaoImpl;
@@ -13,11 +13,11 @@ import by.htp.kyzniatsova.domain.entity.Reader;
 public class ReaderControllerImpl  implements MainController {
 	
 	ReaderDao readerDao;
-	private ReaderVisits readerConsole;
+	private ReaderConsole readerConsole;
 	
 	public ReaderControllerImpl() {
 		readerDao = new ReaderDaoImpl();
-		readerConsole = new ReaderVisits();
+		readerConsole = new ReaderConsole();
 	}
 	
 	@Override

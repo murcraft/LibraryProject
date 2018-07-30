@@ -2,13 +2,12 @@ package by.htp.kyzniatsova.console;
 
 import java.util.Scanner;
 
-public class ReaderVisits {
+public class ReaderConsole {
 	Scanner scanner;
 
-	public ReaderVisits() {
+	public ReaderConsole() {
 		this.scanner = new Scanner(System.in, "utf-8");
 	}
-	
 
 	public String readString() {
 		return scanner.next();

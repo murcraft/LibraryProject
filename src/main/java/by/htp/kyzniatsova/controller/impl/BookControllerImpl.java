@@ -1,6 +1,6 @@
 package by.htp.kyzniatsova.controller.impl;
 
-import by.htp.kyzniatsova.console.ReaderVisits;
+import by.htp.kyzniatsova.console.ReaderConsole;
 import by.htp.kyzniatsova.controller.MainController;
 import by.htp.kyzniatsova.dao.BookDao;
 import by.htp.kyzniatsova.dao.impl.BookDaoImpl;
@@ -9,12 +9,12 @@ import by.htp.kyzniatsova.domain.entity.Book;
 public class BookControllerImpl implements MainController {
 	private BookDao bookDao;
 	private Book book;
-	private ReaderVisits reader;
+	private ReaderConsole reader;
 
 	public BookControllerImpl() {
 		bookDao = new BookDaoImpl();
 		book = new Book();
-		reader = new ReaderVisits();
+		reader = new ReaderConsole();
 	}
 
 	@Override
