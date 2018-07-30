@@ -2,14 +2,14 @@ package by.htp.kyzniatsova.dao;
 
 import java.util.List;
 
-import by.htp.kyzniatsova.domain.entity.Employee;
+import by.htp.kyzniatsova.domain.entity.Reader;
 
 public interface ReaderDao {
 	
-	Employee read(int id);
-	List<Employee> list();
-	boolean insert(Employee employer);
-	boolean delete(Employee employer);
-	boolean update(Employee employer);
+	Reader read(int id);
+	List<Reader> list();
+	boolean insert(Reader employer);
+	boolean delete(Reader employer);
+	boolean update(Reader employer);
 
 }

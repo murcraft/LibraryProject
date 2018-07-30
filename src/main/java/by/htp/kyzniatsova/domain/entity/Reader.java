@@ -1,9 +1,10 @@
 package by.htp.kyzniatsova.domain.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-public class Employee implements Serializable {
+public class Reader implements Serializable {
 
 	private static final long serialVersionUID = 3684975853056735122L;
 	
@@ -11,12 +12,13 @@ public class Employee implements Serializable {
 	private String name;
 	private String surname;
 	private String phone;
-	private Date dateOfRegistr;
+	private Calendar dateOfRegistr;
 	
-	public Employee() {
+	public Reader() {
+		this.dateOfRegistr = new GregorianCalendar();
 	}
 
-	public Employee(int num_ticket, String name, String surname, String phone, Date dateOfRegistr) {
+	public Reader(int num_ticket, String name, String surname, String phone, Calendar dateOfRegistr) {
 		this.num_ticket = num_ticket;
 		this.name = name;
 		this.surname = surname;
@@ -56,11 +58,11 @@ public class Employee implements Serializable {
 		this.phone = phone;
 	}
 
-	public Date getDateOfRegistr() {
+	public Calendar getDateOfRegistr() {
 		return dateOfRegistr;
 	}
 
-	public void setDateOfRegistration(Date dateOfRegistr) {
+	public void setDateOfRegistr(Calendar dateOfRegistr) {
 		this.dateOfRegistr = dateOfRegistr;
 	}
 
@@ -84,7 +86,7 @@ public class Employee implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employee other = (Employee) obj;
+		Reader other = (Reader) obj;
 		if (dateOfRegistr == null) {
 			if (other.dateOfRegistr != null)
 				return false;
