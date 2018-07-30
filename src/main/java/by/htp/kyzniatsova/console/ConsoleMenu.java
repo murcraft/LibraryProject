@@ -1,4 +1,4 @@
-package by.htp.kyzniatsova.logic;
+package by.htp.kyzniatsova.console;
 
 import java.util.Scanner;
 
