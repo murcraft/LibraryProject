@@ -1,7 +1,6 @@
 package by.htp.library.dao;
 
 import java.util.List;
-
 import by.htp.library.domain.entity.Book;
 
 public interface BookDao {
