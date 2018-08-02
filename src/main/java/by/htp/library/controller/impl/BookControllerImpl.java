@@ -1,10 +1,18 @@
 package by.htp.library.controller.impl;
 
+<<<<<<< HEAD:src/main/java/by/htp/library/controller/impl/BookControllerImpl.java
 import by.htp.library.console.ReadingConsole;
 import by.htp.library.controller.MainController;
 import by.htp.library.dao.BookDao;
 import by.htp.library.dao.impl.BookDaoImpl;
 import by.htp.library.domain.entity.Book;
+=======
+import by.htp.kyzniatsova.console.ReaderConsole;
+import by.htp.kyzniatsova.controller.MainController;
+import by.htp.kyzniatsova.dao.BookDao;
+import by.htp.kyzniatsova.dao.impl.BookDaoImpl;
+import by.htp.kyzniatsova.entity.Book;
+>>>>>>> c840a0d152b7a62892bd87c6d795e159adc4330f:src/main/java/by/htp/kyzniatsova/controller/impl/BookControllerImpl.java
 
 public class BookControllerImpl implements MainController {
 	private BookDao bookDao;
