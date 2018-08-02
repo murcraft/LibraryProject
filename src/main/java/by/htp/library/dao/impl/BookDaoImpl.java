@@ -16,7 +16,7 @@ import by.htp.library.domain.entity.Book;
 public class BookDaoImpl implements BookDao {
 	
 	private static final String SELECT_BOOK_BY_ID = "SELECT * FROM Book b WHERE b.id_book = ?";
-	private static final String SELECT_ALL_BOOK = "SELECT * FROM Book b JOIN Author a on a.id_author = b.id_author";
+	private static final String SELECT_ALL_BOOK = "SELECT * FROM Library.Book b";
 	private static final String INSERT_BOOK = "INSERT INTO Book(id_book, Title, Prod_year) VALUES(?,?,?);";
 	private static final String DELETE_ID_BOOK = "DELETE from Book where id_book = ?";
 	private static final String UPDATE_ID_BOOK = "UPDATE Book SET Title = ?, Prod_year = ? where id_book = ?";
@@ -33,6 +33,7 @@ public class BookDaoImpl implements BookDao {
 	
 			if(rs.next()) {
 				book = buildBook(rs);
+
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -41,7 +42,19 @@ public class BookDaoImpl implements BookDao {
 	}
 
 	public List<Book> list() {
+		Book book = new Book();
 		List<Book> books = new ArrayList<Book>();
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
+			PreparedStatement psAll = connection.prepareStatement(SELECT_ALL_BOOK);
+			ResultSet rsAll = psAll.executeQuery();
+			while(rsAll.next()) {
+				book = buildBook(rsAll);
+				books.add(book);
+			}
+
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return books;
 	}
 
@@ -101,6 +114,7 @@ public class BookDaoImpl implements BookDao {
 			while(rsAll.next()) {
 				book = buildBook(rsAll);
 				books.add(book);
+				System.out.println(book);
 			}
 			
 		} catch(SQLException e) {
@@ -117,6 +131,7 @@ public class BookDaoImpl implements BookDao {
 		Book book = new Book();
 		book.setId(rs.getInt("id_book"));
 		book.setTitle(rs.getString("Title"));
+		book.setPages(rs.getInt("Pages"));;
 		book.setProductYear(rs.getString("Prod_year"));
 		return book;
 	}

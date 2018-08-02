@@ -32,18 +32,34 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 			"tb.id_reader = '12346'\r\n" + 
 			"and tb.return_date = '1111-11-11'\r\n" + 
 			"group by tb.id_book;"; 
-			
+	private static final String SELECT_LIBCARD_BYID_READER = "SELECT id_taking_book, id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_reader = ?";		
+	private static final String SELECT_LIBCARD_BYID_BOOK = "SELECT id_taking_book, id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_book = ?";
 	private static final String SELECT_ALL_LIBCARDS = "SELECT * FROM library.taking_book";
 	private static final String INSERT_LIBCARD_BYID = "INSERT INTO library.taking_book (date_start,date_end,id_book,id_employee)VALUES(?,?,?,?)";
 	private static final String DELETE_LIBCARD_BYID = "DELETE FROM library.taking_book WHERE id_card = ?";
 	private static final String UPDATE_LIBCARD_BYID = "UPDATE library.taking_book SET date_start = ? , date_end = ? , id_book = ? , id_employee = ? WHERE id_card = ?";
 
 	@Override
-	public RegistReaders read(int id) {
+	public RegistReaders read(int id_reader) {
+		RegistReaders registReaders = null;
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARD_BYID_READER);
+			ps.setInt(1, id_reader);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				registReaders = buildRegistReaders(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return registReaders;
+	}
+	
+	public RegistReaders readInBook(int id_book) {
 		RegistReaders registReaders = null;
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARD_BYID);
-			ps.setInt(1, id);
+			ps.setInt(1, id_book);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				registReaders = buildRegistReaders(rs);
@@ -60,8 +76,8 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 			PreparedStatement ps = conn.prepareStatement(INSERT_LIBCARD_BYID);
 			ps.setDate(1, new Date(registReaders.getDateStart().getTimeInMillis()));
 			ps.setDate(2, new Date(registReaders.getDateEnd().getTimeInMillis()));
-			ps.setInt(3, registReaders.getId_book());
-			ps.setInt(4, registReaders.getId_reader());
+			ps.setInt(3, registReaders.getBook().getId());
+			ps.setInt(4, registReaders.getReader().getId());
 
 			if (ps.executeUpdate() == 1) {
 				return true;
@@ -79,8 +95,8 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 			PreparedStatement ps = conn.prepareStatement(UPDATE_LIBCARD_BYID);
 			ps.setDate(1, new Date(registReaders.getDateStart().getTimeInMillis()));
 			ps.setDate(2, new Date(registReaders.getDateEnd().getTimeInMillis()));
-			ps.setInt(3, registReaders.getId_book());
-			ps.setInt(4, registReaders.getId_reader());
+			ps.setInt(3, registReaders.getBook().getId());
+			ps.setInt(4, registReaders.getReader().getId());
 			ps.setInt(5, registReaders.getId());
 			System.out.println(ps);
 			if (ps.executeUpdate() == 1) {
@@ -121,22 +137,25 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 		return registReaders;
 	}
 
-	private RegistReaders buildRegistReaders(ResultSet rs) throws SQLException {
+	private RegistReaders buildRegistReaders(ResultSet resSet) throws SQLException {
 		RegistReaders libCard = new RegistReaders();
-		libCard.setId(rs.getInt("id_taking_book"));
+		libCard.setId(resSet.getInt("id_taking_book"));
+		
+		ReaderDao emplDao = new ReaderDaoImpl();
+		Reader reader = emplDao.read(resSet.getInt("id_reader"));
+		libCard.setReader(reader);
+		
+		BookDao bookDao = new BookDaoImpl();
+		Book book = bookDao.read(resSet.getInt("id_book"));
+		libCard.setBook(book);
+		
 		Calendar calendarStart = new GregorianCalendar();
-		calendarStart.setTime(rs.getDate("date_start"));
+		calendarStart.setTime(resSet.getDate("Take_date"));
 		libCard.setDateStart(calendarStart);
 		Calendar calendarEnd = new GregorianCalendar();
-		calendarEnd.setTime(rs.getDate("date_end"));
+		calendarEnd.setTime(resSet.getDate("Return_date"));
 		libCard.setDateEnd(calendarEnd);
-		BookDao bookDao = new BookDaoImpl();
-		Book book = bookDao.read(rs.getInt("id_book"));
-		libCard.setId(book.getId());
-		ReaderDao emplDao = new ReaderDaoImpl();
-		Reader reader = new Reader();
-		reader = emplDao.read(rs.getInt("id_reader"));
-		libCard.setId_reader(reader.getId());
+		
 		return libCard;
 	}
 	
@@ -145,18 +164,29 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 			PreparedStatement ps = conn.prepareStatement(COUNT_LIBCARD_BYID_READER);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
+			List<Book> books = new ArrayList<Book>();
+			Book book = new Book();
 			int count = 0;
 			while (rs.next()) {
+				book.setId(rs.getInt("b.Title"));
+				books.add(book);
 				count++;
 			}
 			if(count > 2) {
-				System.out.println();
+				System.out.println("You have obligations for our library: ");
+				for (Book b : books) {
+					System.out.println(b);
+				}
 			} 
 		} catch (SQLException e) {
 			System.out.println("You have 3 books!!");
 			e.printStackTrace();
 		}
 
+	}
+	
+	private void checkDates() {
+		
 	}
 
 }

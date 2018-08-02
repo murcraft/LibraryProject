@@ -7,8 +7,8 @@ public class MySqlPropertyManager {
 	private static final ResourceBundle rb;
 	
 	static {
-		rb = ResourceBundle.getBundle("db_config"); //ResourceBundle по умолчанию ищет properties files
-	}
+		rb = ResourceBundle.getBundle("db_config"); 
+		}
 	public static String getUrl() {
 		return rb.getString("db.url");
 	}

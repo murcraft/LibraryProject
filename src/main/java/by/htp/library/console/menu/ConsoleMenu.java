@@ -36,9 +36,12 @@ public class ConsoleMenu {
 	
 	public void showStartMenu() {
 		System.out.println(
-				"Choose your role: 1 - " + "Reader " + "\n"
-				+ "2 - Librarian  " + "\n" + "3 - Exit \n");
+				"Hello! Choose your role, please:" + "\n" +
+				"1 - Reader" + "\n" + "2 - Librarian" + "\n" + "3 - Exit" + "\n");
 	}
+	
+	
+	
 	
 	public void librarianMenu() {
 		System.out.println("1 - to view all readers in library " + "\n"

@@ -7,18 +7,19 @@ public class Book implements Serializable {
 	private static final long serialVersionUID = 8040211567201788411L;
 	private int id;
 	private String title;
-	private String pages;
+	private String subject;
+	private int pages;
 	private String productYear;
 	
 	public Book() {
 
 	}
 	
-	public Book(int id, String title, String pages, String date) {
+	public Book(int id, String title, String subject, int pages, String productYear) {
 		this.id = id;
 		this.title = title;
 		this.pages = pages;
-		this.productYear = date;
+		this.productYear = productYear;
 	}
 	
 	public int getId() {
@@ -37,11 +38,19 @@ public class Book implements Serializable {
 		this.title = title;
 	}
 	
-	public String getPages() {
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public int getPages() {
 		return pages;
 	}
 	
-	public void setPages(String pages) {
+	public void setPages(int pages) {
 		this.pages = pages;
 	}
 	
@@ -57,9 +66,10 @@ public class Book implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((productYear == null) ? 0 : productYear.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((pages == null) ? 0 : pages.hashCode());
+		result = prime * result + pages;
+		result = prime * result + ((productYear == null) ? 0 : productYear.hashCode());
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -73,17 +83,19 @@ public class Book implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
+		if (id != other.id)
+			return false;
+		if (pages != other.pages)
+			return false;
 		if (productYear == null) {
 			if (other.productYear != null)
 				return false;
 		} else if (!productYear.equals(other.productYear))
 			return false;
-		if (id != other.id)
-			return false;
-		if (pages == null) {
-			if (other.pages != null)
+		if (subject == null) {
+			if (other.subject != null)
 				return false;
-		} else if (!pages.equals(other.pages))
+		} else if (!subject.equals(other.subject))
 			return false;
 		if (title == null) {
 			if (other.title != null)
@@ -95,9 +107,8 @@ public class Book implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", pages=" + pages + ", date=" + productYear + "]";
+		return "Book [id=" + id + ", title=" + title + ", subject=" + subject + ", pages=" + pages + ", productYear="
+				+ productYear + "]";
 	}
-
-	
 	
 }

@@ -6,10 +6,6 @@ import by.htp.library.controller.MainController;
 
 public class ParentMenu {
 	
-	public static final String WINDOW = "Choose your role: 1 - " + "Reader " + "\n"
-			+ "2 - Librarian  " + "\n"
-			+ "3 - Exit \n";
-	
 	protected MainController controller;
 	
 	public void continueMenu() {
@@ -38,7 +34,8 @@ public class ParentMenu {
 	}
 
 	public void menu() {
-		System.out.println(WINDOW);
+		System.out.println("Choose your role, please:\n" + 
+						"\"1\" - Reader\n"  + "\"2\" - Librarian\n" + "\"3\" - Exit\n");
 	}
 
 

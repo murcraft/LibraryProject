@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Librarian implements Serializable {
 	
 	private static final long serialVersionUID = 8502245257249798664L;
+	private int id;
 	private String name;
 	private String surname;
 	private LibrarianEnum login;
@@ -14,12 +15,21 @@ public class Librarian implements Serializable {
 
 	}
 
-	public Librarian(String name, String surname, LibrarianEnum login, LibrarianEnum password) {
+	public Librarian(int id, String name, String surname, LibrarianEnum login, LibrarianEnum password) {
 		super();
-		this.setName(name);
-		this.setSurname(surname);
-		this.setLogin(login);
-		this.setPassword(password);
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.login = login;
+		this.password = password;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -58,6 +68,7 @@ public class Librarian implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + id;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
@@ -74,20 +85,16 @@ public class Librarian implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Librarian other = (Librarian) obj;
-		if (login == null) {
-			if (other.login != null)
-				return false;
-		} else if (!login.equals(other.login))
+		if (id != other.id)
+			return false;
+		if (login != other.login)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
+		if (password != other.password)
 			return false;
 		if (surname == null) {
 			if (other.surname != null)
@@ -99,9 +106,8 @@ public class Librarian implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Librarian [name=" + name + ", surname=" + surname + ", login=" + login + ", password=" + password + "]";
+		return "Librarian [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
+				+ password + "]";
 	}
-
-	
 
 }

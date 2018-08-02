@@ -10,8 +10,8 @@ public class RegistReaders implements Serializable {
 	 */
 	private static final long serialVersionUID = 6766300609818985571L;
 	private int id;
-	private int idBook;
-	private int idReader;
+	private Book book;
+	private Reader reader;
 	private Calendar dateStart;
 	private Calendar dateEnd;
 	
@@ -20,10 +20,10 @@ public class RegistReaders implements Serializable {
 		this.dateEnd = new GregorianCalendar();
 	}
 	
-	public RegistReaders(int id, int id_book, int id_reader, Calendar dateStart, Calendar dateEnd) {
+	public RegistReaders(int id, Book book, Reader reader, Calendar dateStart, Calendar dateEnd) {
 		this.id = id;
-		this.idBook = id_book;
-		this.idReader = id_reader;
+		this.book = book;
+		this.reader = reader;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
 	}
@@ -36,20 +36,20 @@ public class RegistReaders implements Serializable {
 		this.id = id;
 	}
 	
-	public int getId_book() {
-		return idBook;
+	public Book getBook() {
+		return book;
 	}
 	
-	public void setId_book(int id_book) {
-		this.idBook = id_book;
+	public void setBook(Book book) {
+		this.book = book;
 	}
 	
-	public int getId_reader() {
-		return idReader;
+	public Reader getReader() {
+		return reader;
 	}
 	
-	public void setId_reader(int id_reader) {
-		this.idReader = id_reader;
+	public void setReader(Reader reader) {
+		this.reader = reader;
 	}
 	
 	public Calendar getDateStart() {
@@ -72,11 +72,11 @@ public class RegistReaders implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((book == null) ? 0 : book.hashCode());
 		result = prime * result + ((dateEnd == null) ? 0 : dateEnd.hashCode());
 		result = prime * result + ((dateStart == null) ? 0 : dateStart.hashCode());
 		result = prime * result + id;
-		result = prime * result + idBook;
-		result = prime * result + idReader;
+		result = prime * result + ((reader == null) ? 0 : reader.hashCode());
 		return result;
 	}
 
@@ -89,6 +89,11 @@ public class RegistReaders implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		RegistReaders other = (RegistReaders) obj;
+		if (book == null) {
+			if (other.book != null)
+				return false;
+		} else if (!book.equals(other.book))
+			return false;
 		if (dateEnd == null) {
 			if (other.dateEnd != null)
 				return false;
@@ -101,19 +106,19 @@ public class RegistReaders implements Serializable {
 			return false;
 		if (id != other.id)
 			return false;
-		if (idBook != other.idBook)
-			return false;
-		if (idReader != other.idReader)
+		if (reader == null) {
+			if (other.reader != null)
+				return false;
+		} else if (!reader.equals(other.reader))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "RegReaders [id=" + id + ", idBook=" + idBook + ", idReader=" + idReader + ", dateStart=" + dateStart
+		return "RegistReaders [id=" + id + ", book=" + book + ", reader=" + reader + ", dateStart=" + dateStart
 				+ ", dateEnd=" + dateEnd + "]";
 	}
-	
-		
+
 
 }
