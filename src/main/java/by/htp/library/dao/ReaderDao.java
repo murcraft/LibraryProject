@@ -12,6 +12,6 @@ public interface ReaderDao extends DaoParam<Reader> {
 	boolean delete(Reader employer);
 	boolean update(Reader employer);
 
-	boolean authorization(String login, String password);
+	Reader authorization(String login, String password);
 
 }

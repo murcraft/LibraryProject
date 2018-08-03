@@ -12,6 +12,6 @@ public interface LibrarianDao extends DaoParam<Librarian> {
 	boolean delete(Librarian librarian);
 	boolean update(Librarian librarian);
 
-	boolean authorization(String login, String password);
+	Librarian authorization(String login, String password);
 
 }

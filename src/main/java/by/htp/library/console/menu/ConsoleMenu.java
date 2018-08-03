@@ -1,47 +1,12 @@
 package by.htp.library.console.menu;
 
-import java.util.Scanner;
-
 public class ConsoleMenu {
 
-	public void toContinue() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Do you want to quit? Y(yes)/N(No)" + "\n");
-		String str = scanner.next();
-		switch (str) {
-		case "N":
-			toExit();
-			break;
-		case "n":
-			toExit();
-			break;
-		}
-	}
-
-	public void toExit() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Do you want to quit? Y(yes)/N(No)" + "\n");
-		String str = scanner.next();
-		switch (str) {
-		case "Y":
-			System.out.println("Thanks for your choise. Come to us else!");
-			System.exit(0);
-			break;
-		case "y":
-			System.out.println("Thanks for your choise. Come to us else!");
-			System.exit(0);
-			break;
-		}
-	}
-	
 	public void showStartMenu() {
 		System.out.println(
 				"Hello! Choose your role, please:" + "\n" +
 				"1 - Reader" + "\n" + "2 - Librarian" + "\n" + "3 - Exit" + "\n");
 	}
-	
-	
-	
 	
 	public void librarianMenu() {
 		System.out.println("1 - to view all readers in library " + "\n"

@@ -22,6 +22,8 @@ public class ReaderControllerImpl implements MainController {
 	
 	@Override
 	public boolean insert() {
+		System.out.println("Enter the ticket_number for the reader");
+		String ticketNumber = readerConsole.readLine();
 		System.out.println("Enter the first name of reader");
 		String name = readerConsole.readLine();
 		System.out.println("Enter the surname of reader");
@@ -37,11 +39,12 @@ public class ReaderControllerImpl implements MainController {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
 			dateReg.setTime(dateFormat.parse(date));
 			Reader reader = new Reader();
+			reader.setNum_ticket(ticketNumber);
 			reader.setName(name);
 			reader.setSurname(surname);
-			reader.setPassword(pass);
 			reader.setPhoneNumber(phone);
 			reader.setDateOfRegistr(dateReg);
+			reader.setPassword(pass);
 		if (readerDao.insert(reader)) {
 			System.out.println("Reader was added successfully");
 			return true;

@@ -1,6 +1,7 @@
 package by.htp.library.domain.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class Librarian implements Serializable {
 	
@@ -8,20 +9,25 @@ public class Librarian implements Serializable {
 	private int id;
 	private String name;
 	private String surname;
-	private LibrarianEnum login;
-	private LibrarianEnum password;
+	private String login;
+	private String password;
+	private Calendar regDate;
+	private String phone;
 	
 	public Librarian() {
 
 	}
 
-	public Librarian(int id, String name, String surname, LibrarianEnum login, LibrarianEnum password) {
+	public Librarian(int id, String name, String surname, String login, String password, Calendar regDate,
+			String phone) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.login = login;
 		this.password = password;
+		this.regDate = regDate;
+		this.phone = phone;
 	}
 
 	public int getId() {
@@ -48,20 +54,36 @@ public class Librarian implements Serializable {
 		this.surname = surname;
 	}
 
-	public LibrarianEnum getLogin() {
+	public String getLogin() {
 		return login;
 	}
 
-	public void setLogin(LibrarianEnum login) {
+	public void setLogin(String login) {
 		this.login = login;
 	}
 
-	public LibrarianEnum getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(LibrarianEnum password) {
+	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Calendar getRegDate() {
+		return regDate;
+	}
+
+	public void setRegDate(Calendar regDate) {
+		this.regDate = regDate;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Override
@@ -72,6 +94,8 @@ public class Librarian implements Serializable {
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		result = prime * result + ((regDate == null) ? 0 : regDate.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		return result;
 	}
@@ -87,14 +111,30 @@ public class Librarian implements Serializable {
 		Librarian other = (Librarian) obj;
 		if (id != other.id)
 			return false;
-		if (login != other.login)
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (password != other.password)
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
+		if (regDate == null) {
+			if (other.regDate != null)
+				return false;
+		} else if (!regDate.equals(other.regDate))
 			return false;
 		if (surname == null) {
 			if (other.surname != null)
@@ -107,7 +147,7 @@ public class Librarian implements Serializable {
 	@Override
 	public String toString() {
 		return "Librarian [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
-				+ password + "]";
+				+ password + ", regDate=" + regDate + ", phone=" + phone + "]";
 	}
 
 }

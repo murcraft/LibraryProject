@@ -26,19 +26,17 @@ import by.htp.library.domain.entity.Reader;
 
 public class LibrarianDaoImpl implements LibrarianDao {
 	
-	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT Num_ticket, Name, Surname, Reg_date, Phone FROM library.readers r WHERE r.Num_ticket = ?";
-	private static final String SELECT_LIST_EMPLOYEE = "SELECT * FROM library.readers r WHERE r.Num_ticket = ?";
-	private static final String INSERT_EMPLOYEE = "INSERT INTO library.readers(Name, Surname, Reg_date, Phone) VALUES(?,?,?,?);";
-	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.reader where Num_ticket = ?";
-	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.readers SET id_employee = ?, Name = ?, Surname = ?, Reg_date = ?, Phone = ? where Num_ticket = ?";
-	private static final String SELECT_LOGIN = "SELECT Num_ticket, Password FROM library.readers r WHERE r.Num_ticket = ? and r.Password = ?";
-	private static final String SELECT_PASS = "SELECT Password FROM library.readers r WHERE r.Num_ticket = ? and r.Password = ?";
+	private static final String SELECT_LIBRARIAN_BY_ID = "SELECT * FROM library.librarian l WHERE l.id_librarian = ?";
+	private static final String SELECT_LIST_LIBRARIANS = "SELECT * FROM library.librarian";
+	private static final String INSERT_LIBRARIAN = "INSERT INTO library.librarian(id_librarian, Num_ticket, Name, Surname, Password, Reg_date, Phone) VALUES(?,?,?,?,?,?,?)";
+	private static final String LIBRARIAN = "DELETE from library.librarian where id_librarian = ?";
+	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.librarian SET id_librarian = ?, Num_ticket = ?, Name = ?, Surname = ?, Password = ?, Reg_date = ?, Phone = ? where id_librarian = ?";
+	private static final String SELECT_LOGIN = "SELECT id_librarian, Num_ticket, Name, Surname, Password, Reg_date, Phone FROM library.librarian r WHERE r.Num_ticket = ? and r.Password = ?";
 	
 	private DaoParam<Librarian> librarianDao;
 	private ReadingConsole readingConsole;
 
 	public LibrarianDaoImpl() {
-		librarianDao =  new LibrarianDaoImpl();
 		readingConsole = new ReadingConsole();
 	}
 	
@@ -47,7 +45,7 @@ public class LibrarianDaoImpl implements LibrarianDao {
 		Librarian libr = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
+			PreparedStatement ps = connection.prepareStatement(SELECT_LIBRARIAN_BY_ID);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -63,22 +61,46 @@ public class LibrarianDaoImpl implements LibrarianDao {
 	public List<Librarian> list() {
 		List<Librarian> listLibr = new ArrayList<Librarian>();
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = connection.prepareStatement(SELECT_LIST_EMPLOYEE);
+			PreparedStatement ps = connection.prepareStatement(SELECT_LIST_LIBRARIANS);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				listLibr.add(buildLibr(rs));
 			}
 		} catch (SQLException e) {
-			
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return listLibr;
 	}
 	
+	public void printLibrarians() {
+		List<Librarian> listLibr = new ArrayList<Librarian>();
+		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = connection.prepareStatement(SELECT_LIST_LIBRARIANS);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				listLibr.add(buildLibr(rs));
+			}
+			for(Librarian lib : listLibr) {
+				System.out.println(lib);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean fillreader(ReadingConsole readingConsole) {
+		Reader reader = new Reader();
+		
+		return false;
+		
+	}
+	
 	@Override
 	public boolean insert(Librarian libr) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
+			PreparedStatement ps = connection.prepareStatement(INSERT_LIBRARIAN);
 			ps.setString(1, libr.getName());
 			ps.setString(2, libr.getSurname());
 			if (ps.executeUpdate() == 1) {
@@ -93,51 +115,35 @@ public class LibrarianDaoImpl implements LibrarianDao {
 
 	private Librarian buildLibr(ResultSet rs) throws SQLException {
 		Librarian libr = new Librarian();
-		libr.setId(rs.getInt("id"));
+		libr.setId(rs.getInt("id_librarian"));
+		libr.setId(rs.getInt("Num_ticket"));
 		libr.setName(rs.getString("Name"));
 		libr.setSurname(rs.getString("Surname"));
+		libr.setPassword(rs.getString("Password"));
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(rs.getDate("Reg_date"));
+		libr.setRegDate(calendar);
+		libr.setPhone(rs.getString("Phone"));
 		return libr;
 	}
 
 	@Override
-	public boolean authorization(String login, String password) {
+	public Librarian authorization(String login, String password) {
+		Librarian librarian = new Librarian();
 			try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 				PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);
 				ps.setString(1, login);
 				ps.setString(2, password);
 				ResultSet rs = ps.executeQuery();
 				if(rs.next()) {
-					buildLibr(rs);
-				}
-				if (ps.executeUpdate() == 1) {
-					return true;
-				}
+					librarian = buildLibr(rs);
+					return librarian;
+				} else return null;
 			} catch (SQLException e) {			
 				e.printStackTrace();
 			}
-			return false;
+			return librarian;
 
-	}
-	
-	public Boolean checkReader(String login, String pass) {
-		try (Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-			PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);
-			ps.setString(1, login);
-			ps.setString(2, pass);
-			ResultSet rs = ps.executeQuery();
-			rs.next();
-			GregorianCalendar takeDate = new GregorianCalendar();
-			GregorianCalendar currentDate = new GregorianCalendar();
-			takeDate.setTime(rs.getDate("take_date"));
-			takeDate.add(Calendar.DAY_OF_MONTH, 30);
-			if (takeDate.after(currentDate))
-				System.out.println("You have a book, which have to return untill  "
-						+ new SimpleDateFormat("yyyy-MM-dd").format(takeDate.getTime()));
-			return true;
-		} catch (SQLException e) {
-			System.err.println("You have not read any books");
-			return false;
-		}
 	}
 
 	@Override

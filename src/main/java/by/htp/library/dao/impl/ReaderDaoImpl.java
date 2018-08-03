@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +26,7 @@ public class ReaderDaoImpl implements ReaderDao {
 	
 	private static final String SELECT_EMPLOYEE_BY_ID = "SELECT Num_ticket, Name, Surname, Reg_date, Phone FROM library.readers r WHERE r.Num_ticket = ?";
 	private static final String SELECT_LIST_EMPLOYEE = "SELECT * FROM library.readers r WHERE r.Num_ticket = ?";
-	private static final String INSERT_EMPLOYEE = "INSERT INTO library.readers(Name, Surname, Reg_date, Phone) VALUES(?,?,?,?);";
+	private static final String INSERT_EMPLOYEE = "INSERT INTO library.readers(Num_ticket, Name, Surname, Phone, Reg_date, Password) VALUES(?,?,?,?,?,?);";
 	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.reader where Num_ticket = ?";
 	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.readers SET id_employee = ?, Name = ?, Surname = ?, Reg_date = ?, Phone = ? where Num_ticket = ?";
 	private static final String SELECT_LOGIN = "SELECT id_reader, Num_ticket, Name, Surname, Reg_date, Phone, Password FROM library.readers r WHERE r.Num_ticket = ? and r.Password = ?";
@@ -35,7 +36,6 @@ public class ReaderDaoImpl implements ReaderDao {
 	private ReadingConsole readingConsole;
 
 	public ReaderDaoImpl() {
-//		userDao = new ReaderDaoImpl();
 		readingConsole = new ReadingConsole();
 	}
 	
@@ -77,17 +77,21 @@ public class ReaderDaoImpl implements ReaderDao {
 	public boolean insert(Reader employee) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
-			ps.setString(1, employee.getName());
-			ps.setString(2, employee.getSurname());
-			ps.setDate(3, new Date(employee.getDateOfRegistr().getTimeInMillis()));
+			ps.setString(1, employee.getNum_ticket());
+			ps.setString(2, employee.getName());
+			ps.setString(3, employee.getSurname());
 			ps.setString(4, employee.getPhone());
+			ps.setDate(5, new Date(employee.getDateOfRegistr().getTime().getTime()));
+			ps.setString(6, employee.getPassword());
 			if (ps.executeUpdate() == 1) {
+				System.out.println(employee + " was inserted successfully");
 				return true;
-			}			
+			}
+		} catch (SQLIntegrityConstraintViolationException ex) {
+			System.out.println("Error ticket number, this number exists in datatbase.");
 		} catch (SQLException e) {
-			
 			e.printStackTrace();
-		}
+		} 		
 		return false;
 	}
 
@@ -142,25 +146,26 @@ public class ReaderDaoImpl implements ReaderDao {
 		return buildReader(rs);
 	}
 
-	@Override
-	public boolean authorization(String login, String password) {
-			try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-				PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);
-				ps.setString(1, login);
-				ps.setString(2, password);
-				ResultSet rs = ps.executeQuery();
-				if(rs.next()) {
-					buildReader(rs);
-					return true;
-				} else return false;
-			} catch (SQLException e) {			
-				e.printStackTrace();
-			}
-			return false;
-
-	}
+//	@Override
+//	public boolean authorization(String login, String password) {
+//			try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
+//				PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);
+//				ps.setString(1, login);
+//				ps.setString(2, password);
+//				ResultSet rs = ps.executeQuery();
+//				if(rs.next()) {
+//					buildReader(rs);
+//					return true;
+//				} else return false;
+//			} catch (SQLException e) {			
+//				e.printStackTrace();
+//			}
+//			return false;
+//
+//	}
 	
-	public Reader authorization1(String login, String password) {
+	@Override
+	public Reader authorization(String login, String password) {
 		Reader reader = new Reader();
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);

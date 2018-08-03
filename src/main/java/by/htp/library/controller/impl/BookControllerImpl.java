@@ -1,35 +1,39 @@
 package by.htp.library.controller.impl;
 
-<<<<<<< HEAD:src/main/java/by/htp/library/controller/impl/BookControllerImpl.java
 import by.htp.library.console.ReadingConsole;
 import by.htp.library.controller.MainController;
 import by.htp.library.dao.BookDao;
 import by.htp.library.dao.impl.BookDaoImpl;
 import by.htp.library.domain.entity.Book;
-=======
-import by.htp.kyzniatsova.console.ReaderConsole;
-import by.htp.kyzniatsova.controller.MainController;
-import by.htp.kyzniatsova.dao.BookDao;
-import by.htp.kyzniatsova.dao.impl.BookDaoImpl;
-import by.htp.kyzniatsova.entity.Book;
->>>>>>> c840a0d152b7a62892bd87c6d795e159adc4330f:src/main/java/by/htp/kyzniatsova/controller/impl/BookControllerImpl.java
 
 public class BookControllerImpl implements MainController {
 	private BookDao bookDao;
 	private Book book;
-	private ReadingConsole reader;
+	private ReadingConsole readerConsole;
 
 	public BookControllerImpl() {
 		bookDao = new BookDaoImpl();
 		book = new Book();
-		reader = new ReadingConsole();
+		readerConsole = new ReadingConsole();
 	}
 
 	@Override
 	public boolean insert() {
-		System.out.println("Enter the book's name");
-		String title = reader.readLine();		
+		System.out.println("Enter the book's title:");
+		String title = readerConsole.readLine();
 		book.setTitle(title);
+		System.out.println("Enter number of pages in the book:");
+		int pages = readerConsole.readNumber();
+		book.setPages(pages);
+		System.out.println("Enter the production year in format YYYY:");
+		String year = readerConsole.readLine();
+		if(year.length() != 4) {
+			return false;
+		}
+		book.setProductYear(year);
+		System.out.println("Enter the book's Subject: ");
+		String subject = readerConsole.readString();
+		book.setSubject(subject);
 		if(bookDao.insert(book) == true) {
 			return true;
 		} else {
@@ -41,11 +45,11 @@ public class BookControllerImpl implements MainController {
 	public boolean update() {
 		showAll();
 		System.out.println("Choose the book for edition");
-		int id_book = reader.readNumber();
+		int id_book = readerConsole.readNumber();
 		System.out.println("Enter the name of book");
-		String title = reader.readLine();
+		String title = readerConsole.readLine();
 		System.out.println("Enter the year of book");
-		String productYear = reader.readLine();
+		String productYear = readerConsole.readLine();
 		book.setId(id_book);
 		book.setTitle(title);
 		book.setProductYear(productYear);
@@ -60,7 +64,7 @@ public class BookControllerImpl implements MainController {
 	public boolean delete() {
 		showAll();
 		System.out.println("Choose the book for deleting and enter its id number");
-		int id = reader.readNumber();
+		int id = readerConsole.readNumber();
 		book.setId(id);
 		if(bookDao.update(book)) {
 			return true;
@@ -79,7 +83,7 @@ public class BookControllerImpl implements MainController {
 	@Override
 	public void showBook() {
 		System.out.println("Enter the id number of book");
-		int id = reader.readNumber();
+		int id = readerConsole.readNumber();
 		bookDao.read(id);
 	}
 

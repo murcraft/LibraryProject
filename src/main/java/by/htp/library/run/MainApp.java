@@ -12,7 +12,7 @@ public class MainApp {
 		
 		while(true) {
 			cMenu.showStartMenu();
-			logicMenu.authorization();
+			logicMenu.checkUsers();
 		}
 	}
 }
