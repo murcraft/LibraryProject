@@ -116,7 +116,7 @@ public class RegistReaders implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RegistReaders [id=" + id + ", book=" + book + ", reader=" + reader + ", dateStart=" + dateStart
+		return "RegistReaders [id=" + id + ",\nbook=" + book + ", reader=" + reader + ", dateStart=" + dateStart
 				+ ", dateEnd=" + dateEnd + "]";
 	}
 

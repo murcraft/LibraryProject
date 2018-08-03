@@ -146,8 +146,7 @@ public class Librarian implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Librarian [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
-				+ password + ", regDate=" + regDate + ", phone=" + phone + "]";
+		return "" + id +") Librarian: " + name + " " + surname + ", date of registration: " + regDate + ", phone number: " + phone;
 	}
 
 }

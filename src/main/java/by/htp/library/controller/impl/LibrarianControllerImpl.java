@@ -85,23 +85,7 @@ public class LibrarianControllerImpl implements MainController {
 		}
 		return false;
 	}
-
-	@Override
-	public boolean delete() {
-		showAll();
-		System.out.println("Choose id, who's you want to change");
-		int id = readerConsole.readNumber();
-		Librarian librarian = new Librarian();
-//		librarian.setId(id);		
-		if (librarianDao.delete(librarianDao.read(id))) {
-			System.out.println("Reader was added successfully");
-			return true;
-		} else {
-			System.out.println("Error, try again, please");
-			return false;
-		}
-	}
-
+	
 	@Override
 	public void showAll() {
 		for (Librarian librarian : librarianDao.list()) {
@@ -110,9 +94,12 @@ public class LibrarianControllerImpl implements MainController {
 	}
 
 	@Override
+	public boolean delete() {
+			return false;
+	}
+	
+	@Override
 	public void showBook() {
-		
-		
 	}
 
 }

@@ -60,16 +60,14 @@ public class LogicMenu {
 			if (readerDao.authorization(login, pass) != null) {
 				Reader reader = readerDao.authorization(login, pass);
 				System.out.println("It's nice to meet you! " + reader.getName() + " " + reader.getSurname() + "!");
-				System.out.println(reader);
 				RegistReaders registReaders = registReadersDaoImpl.read(reader.getId());
 				System.out.println();
 
 				registReadersDaoImpl.readThreeBook(reader.getNum_ticket());
 				return true;
 			} else {
-				System.out.println("You are entered incorrect login or password");
-				System.out.println("Do you want to exit? enter 3");
-				System.out.println("No? Enter any symbol");
+				System.out.println("You are entered incorrect login or password.");
+				System.out.println("If you want to exit enter 3\nif not - enter any symbol:");
 				if (readConsole.readLine().equals("0"))
 					break;
 			}
@@ -88,13 +86,8 @@ public class LogicMenu {
 				exitMenu(readConsole);
 				break;
 			case "2": {
-				System.out.println("Enter id book");
-				int id = checkIdBook(readConsole);
+				bookController.showBook();
 				sleep(1000);
-				bookDao = new BookDaoImpl();
-				Book book = new Book();
-				book = bookDao.read(id);
-				checkNullBook(book, id);
 				exitMenu(readConsole);
 				break;
 			}
@@ -102,7 +95,7 @@ public class LogicMenu {
 				break output;
 			default:
 				System.out.println("You are entered incorrect number");
-				System.out.println("Number must be [0-2]");
+				System.out.println("Number must be 1, 2 or 3");
 			}
 		}
 	}
@@ -126,22 +119,11 @@ public class LogicMenu {
 				exitMenu(readConsole);
 				break;
 			case "2":
-//				System.out.println("Enter id of reader");
-//				int id = checkIdBoock(readConsole);
 				sleep(1000);
 				readerController.insert();
 				exitMenu(readConsole);
 				break;	
-			case "34":
-//				System.out.println("Enter id of book");
-				int id1 = checkIdBook(readConsole);
-				sleep(1000);
-				readerDao.read(id1);
-				exitMenu(readConsole);
-				break;
 			case "3":
-//				System.out.println("Enter id of book");
-//				int idBook = checkIdBoock(readConsole);
 				Boolean flag = bookController.insert();
 				if(flag) {
 					System.out.println("Success");

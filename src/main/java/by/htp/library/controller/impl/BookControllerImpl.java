@@ -1,5 +1,7 @@
 package by.htp.library.controller.impl;
 
+import java.util.List;
+
 import by.htp.library.console.ReadingConsole;
 import by.htp.library.controller.MainController;
 import by.htp.library.dao.BookDao;
@@ -72,7 +74,8 @@ public class BookControllerImpl implements MainController {
 	
 	@Override
 	public void showAll() {
-		for(Book book : bookDao.list()) {
+		List<Book> books = bookDao.list();
+		for(Book book : books) {
 			System.out.println(book);
 		}
 	}
@@ -81,7 +84,9 @@ public class BookControllerImpl implements MainController {
 	public void showBook() {
 		System.out.println("Enter the id number of book");
 		int id = readerConsole.readNumber();
-		bookDao.read(id);
+		Book book = new Book();
+		book = bookDao.read(id);
+		System.out.println(book);
 	}
 
 }

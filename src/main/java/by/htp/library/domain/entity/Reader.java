@@ -153,8 +153,8 @@ public class Reader implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Employee [num_ticket=" + num_ticket + ", name=" + name + ", surname=" + surname + ", phone=" + phone
-				+ ", dateOfRegistr=" + dateOfRegistr + "]";
+		return "" + id + ") " + name + ", " + surname + ", ticket ¹ " + num_ticket + ", phone: " + phone
+				+ ", date of rgistration: " + dateOfRegistr ;
 	}
 
 

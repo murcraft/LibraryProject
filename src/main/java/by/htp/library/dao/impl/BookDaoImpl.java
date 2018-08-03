@@ -30,7 +30,6 @@ public class BookDaoImpl implements BookDao {
 			PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_ID);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
-	
 			if(rs.next()) {
 				book = buildBook(rs);
 			}

@@ -3,26 +3,19 @@ package by.htp.library.dao.impl;
 import static by.htp.library.dao.util.MySqlPropertyManager.*;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import by.htp.library.console.ReadingConsole;
-import by.htp.library.controller.factory.ReaderController;
-import by.htp.library.controller.impl.LibrarianControllerImpl;
-import by.htp.library.controller.impl.ReaderControllerImpl;
 import by.htp.library.dao.DaoParam;
 import by.htp.library.dao.LibrarianDao;
-import by.htp.library.dao.ReaderDao;
 import by.htp.library.domain.entity.Librarian;
-import by.htp.library.domain.entity.Reader;
 
 public class LibrarianDaoImpl implements LibrarianDao {
 	
@@ -88,13 +81,6 @@ public class LibrarianDaoImpl implements LibrarianDao {
 			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
-	}
-	
-	private boolean fillreader(ReadingConsole readingConsole) {
-		Reader reader = new Reader();
-		
-		return false;
-		
 	}
 	
 	@Override

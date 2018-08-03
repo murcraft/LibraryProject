@@ -38,7 +38,9 @@ public class ReaderControllerImpl implements MainController {
 			String date = readerConsole.readLine();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
 			dateReg.setTime(dateFormat.parse(date));
+			
 			Reader reader = new Reader();
+			
 			reader.setNum_ticket(ticketNumber);
 			reader.setName(name);
 			reader.setSurname(surname);
@@ -70,17 +72,9 @@ public class ReaderControllerImpl implements MainController {
 		System.out.println("Enter the phone number of reader in format 80XXXXXXXXX");
 		String phone = readerConsole.readLine();
 		System.out.println("Enter rhe date of registration in format YYYY-MM-DD");
+		String date = readerConsole.readLine();
 		try {
-			Calendar dateReg = Calendar.getInstance();
-			String date = readerConsole.readLine();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
-			dateReg.setTime(dateFormat.parse(date));
-			Reader reader = new Reader();
-			reader.setNum_ticket(num_ticket);
-			reader.setName(name);
-			reader.setSurname(surname);
-			reader.setPhoneNumber(phone);
-			if (readerDao.insert(reader)) {
+			if (readerDao.insert(buildReader(num_ticket, name, surname, phone, date))) {
 				System.out.println("Reader was updated successfully");
 				return true;
 			} else {
@@ -88,7 +82,7 @@ public class ReaderControllerImpl implements MainController {
 				return false;
 			}
 		} catch (ParseException e1) {
-
+			System.out.println("Wrong format of date.");
 			e1.printStackTrace();
 		}
 		return false;
@@ -119,8 +113,19 @@ public class ReaderControllerImpl implements MainController {
 
 	@Override
 	public void showBook() {
+	}
+	
+	private Reader buildReader(String date, String num_ticket, String name, String surname, String phone) throws ParseException {
+		Calendar dateReg = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+		dateReg.setTime(dateFormat.parse(date));
 		
-		
+		Reader reader = new Reader();
+		reader.setNum_ticket(num_ticket);
+		reader.setName(name);
+		reader.setSurname(surname);
+		reader.setPhoneNumber(phone);
+		return reader;
 	}
 
 }
