@@ -62,12 +62,9 @@ public class LogicMenu {
 				System.out.println("It's nice to meet you! " + reader.getName() + " " + reader.getSurname() + "!");
 				System.out.println(reader);
 				RegistReaders registReaders = registReadersDaoImpl.read(reader.getId());
-				System.out.println(registReaders);
-				
-				registReadersDaoImpl.read(reader.getId());
-				if(registReaders != null) {
-					registReadersDaoImpl.readThreeBook(reader.getId());
-				}
+				System.out.println();
+
+				registReadersDaoImpl.readThreeBook(reader.getNum_ticket());
 				return true;
 			} else {
 				System.out.println("You are entered incorrect login or password");

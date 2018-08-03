@@ -25,13 +25,11 @@ import by.htp.library.domain.entity.RegistReaders;
 public class RegistReadersDaoImpl implements RegistReadersDao {
 
 	private static final String SELECT_LIBCARD_BYID = "SELECT * FROM library.taking_book WHERE id_taking_book = ?";
-	private static final String COUNT_LIBCARD_BYID_READER = "SELECT count(tb.id_reader) as count, b.Title\r\n" + 
-			"FROM library.taking_book tb\r\n" + 
-			"left join library.book b on b.id_book=tb.id_book\r\n" + 
-			"WHERE \r\n" + 
-			"tb.id_reader = '12346'\r\n" + 
-			"and tb.return_date = '1111-11-11'\r\n" + 
-			"group by tb.id_book;"; 
+	private static final String COUNT_LIBCARD_BYID_READER = "SELECT count(tb.id_reader) as count, tb.id_taking_book, r.id_reader, r.Num_ticket, r.Name, r.Surname, r.Phone, r.Reg_date, r.Password, b.id_book, b.Title, b.Pages, b.Prod_year, b.Subject, tb.take_date\r\n" + 
+			"FROM library.taking_book tb \r\n" + 
+			"left join library.readers r on r.Num_ticket = tb.id_reader \r\n" + 
+			"left join library.book b on b.id_book = tb.id_book \r\n" + 
+			"WHERE tb.id_reader = ? and tb.return_date = '1111-11-11' and (current_date() - take_date) > 30 group by tb.id_book;"; 
 	private static final String SELECT_LIBCARD_BYID_READER = "SELECT id_taking_book, id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_reader = ?";		
 	private static final String SELECT_LIBCARD_BYID_BOOK = "SELECT id_taking_book, id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_book = ?";
 	private static final String SELECT_ALL_LIBCARDS = "SELECT * FROM library.taking_book";
@@ -159,27 +157,31 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 		return libCard;
 	}
 	
-	public void readThreeBook(int id) {
+	public void readThreeBook(String numTicket) {
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = conn.prepareStatement(COUNT_LIBCARD_BYID_READER);
-			ps.setInt(1, id);
+			ps.setString(1, numTicket);
 			ResultSet rs = ps.executeQuery();
 			List<Book> books = new ArrayList<Book>();
-			Book book = new Book();
+
 			int count = 0;
 			while (rs.next()) {
-				book.setId(rs.getInt("b.Title"));
+				Book book = new Book();
+				book.setTitle(rs.getString("b.Title"));
+				book.setProductYear(rs.getString("b.Prod_year"));
 				books.add(book);
 				count++;
 			}
 			if(count > 2) {
-				System.out.println("You have obligations for our library: ");
+				System.out.println("You have " + count + " books as obligations in our library: ");
 				for (Book b : books) {
-					System.out.println(b);
+					int i = 0;
+					System.out.println(i + " - " + b.getTitle());
+					i++;
 				}
 			} 
 		} catch (SQLException e) {
-			System.out.println("You have 3 books!!");
+			System.out.println("Database error");
 			e.printStackTrace();
 		}
 

@@ -31,9 +31,6 @@ public class BookControllerImpl implements MainController {
 			return false;
 		}
 		book.setProductYear(year);
-		System.out.println("Enter the book's Subject: ");
-		String subject = readerConsole.readString();
-		book.setSubject(subject);
 		if(bookDao.insert(book) == true) {
 			return true;
 		} else {
