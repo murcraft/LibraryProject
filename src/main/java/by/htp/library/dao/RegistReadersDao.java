@@ -1,7 +1,10 @@
 package by.htp.library.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import by.htp.library.domain.entity.Book;
+import by.htp.library.domain.entity.Reader;
 import by.htp.library.domain.entity.RegistReaders;
 
 public interface RegistReadersDao {
@@ -15,5 +18,7 @@ public interface RegistReadersDao {
 	boolean delete(RegistReaders lCard);
 
 	List<RegistReaders> getAll();
+
+	Map<Book, RegistReaders> readReadersOver(Reader reader);
 
 }

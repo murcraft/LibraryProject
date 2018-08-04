@@ -94,7 +94,8 @@ public class ReaderDaoImpl implements ReaderDao {
 		} 		
 		return false;
 	}
-
+	
+	@Override
 	public boolean delete(Reader employee) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement ps = connection.prepareStatement(DELETE_ID_EMPLOYEE);
@@ -107,7 +108,8 @@ public class ReaderDaoImpl implements ReaderDao {
 		}
 		return false;
 	}
-
+	
+	@Override
 	public boolean update(Reader employee) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement ps = connection.prepareStatement(UPDATE_ID_EMPLOYEE);
@@ -141,28 +143,11 @@ public class ReaderDaoImpl implements ReaderDao {
 		employee.setDateOfRegistr(calendar);
 		return employee;
 	}
-
-	public Reader getEmployee(ResultSet rs) throws SQLException {
+	
+	@Override
+	public Reader getReader(ResultSet rs) throws SQLException {
 		return buildReader(rs);
 	}
-
-//	@Override
-//	public boolean authorization(String login, String password) {
-//			try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
-//				PreparedStatement ps = connection.prepareStatement(SELECT_LOGIN);
-//				ps.setString(1, login);
-//				ps.setString(2, password);
-//				ResultSet rs = ps.executeQuery();
-//				if(rs.next()) {
-//					buildReader(rs);
-//					return true;
-//				} else return false;
-//			} catch (SQLException e) {			
-//				e.printStackTrace();
-//			}
-//			return false;
-//
-//	}
 	
 	@Override
 	public Reader authorization(String login, String password) {

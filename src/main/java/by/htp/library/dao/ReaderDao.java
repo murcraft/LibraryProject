@@ -1,5 +1,7 @@
 package by.htp.library.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import by.htp.library.domain.entity.Reader;
@@ -13,5 +15,6 @@ public interface ReaderDao extends DaoParam<Reader> {
 	boolean update(Reader employer);
 
 	Reader authorization(String login, String password);
+	Reader getReader(ResultSet rs) throws SQLException;
 
 }

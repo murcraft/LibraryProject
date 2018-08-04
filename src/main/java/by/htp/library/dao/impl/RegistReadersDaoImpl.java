@@ -10,10 +10,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import by.htp.library.dao.BookDao;
 import by.htp.library.dao.ReaderDao;
@@ -48,6 +53,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				registReaders = buildRegistReaders(rs);
 			}
 		} catch (SQLException e) {
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return registReaders;
@@ -63,6 +69,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				registReaders = buildRegistReaders(rs);
 			}
 		} catch (SQLException e) {
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return registReaders;
@@ -81,7 +88,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				return true;
 			}
 		} catch (SQLException e) {
-
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return false;
@@ -101,6 +108,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				return true;
 			}
 		} catch (SQLException e) {
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return false;
@@ -115,6 +123,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				return true;
 			}
 		} catch (SQLException e) {
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return false;
@@ -130,6 +139,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				registReaders.add(buildRegistReaders(rs));
 			}
 		} catch (SQLException e) {
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 		return registReaders;
@@ -181,14 +191,133 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 				}
 			} 
 		} catch (SQLException e) {
-			System.out.println("Database error");
+			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 
 	}
 	
-	private void checkDates() {
-		
+	public Map<Reader, Map<Book, RegistReaders>> readReadersObligation(List<Reader> readersList) {
+		calculateOverdue();
+		ReaderDao readerDao = new ReaderDaoImpl();
+		Reader reader = new Reader();
+		Map<Book, RegistReaders> booksMap = new HashMap<>();
+		Map<Reader, Map<Book, RegistReaders>> readersMap = new HashMap<>();
+		for (Reader r : readersList) {
+			booksMap = readReadersOver(r);
+			if ( !booksMap.isEmpty()) {
+				reader = readerDao.get(u.getIdUser());
+				readersMap.put(reader, booksMap);
+			}
+		}
+		return readersMap;
 	}
+
+	private List<RegistReaders> getNotReturnBooks() {
+		List<RegistReaders> reg = new ArrayList<>();
+
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(SELECT_NOTRETURN_LIBCARDS);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				reg.add(buildRegistReaders(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+		return reg;
+	}
+
+	@Override
+	public Map<Book, RegistReaders> readReadersOver(Reader reader) {
+		RegistReaders reg = null;
+		Map<Book, RegistReaders> bookMap = new HashMap<>();
+		
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(SELECT_NOTRETURN_LIBCARDS_BYUSER);
+			ps.setString(1, reader.getNum_ticket());
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {	
+				reg = buildRegistReaders(rs);
+				bookMap.put(reg.getBook(), reg);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+		return bookMap;
+	}
+	private boolean updateOverdue(RegistReaders reg) {
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(UPDATE_LIBRARUCARD_OVERDUE);
+			ps.setInt(1, reg.getDaysOverdue());
+			ps.setInt(2, reg.getId());
+			
+			if (ps.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public void calculateOverdue() {
+		ZonedDateTime zdt1 = ZonedDateTime.now();
+		for (RegistReaders reg : getNotReturnBooks()) {
+			if (!reg.isReturned()) {
+				Period period = Period.between(
+						reg.getDateEnd().getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+						zdt1.toLocalDate());
+				int k = period.getDays();
+				if (k > 0) {
+					reg.setDaysOverdue(k);
+					updateOverdue(reg);
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<RegistReaders> findCardsByEmployee(int id) {
+		List<RegistReaders> libCards = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				libCards.add(buildRegistReaders(rs));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+
+		return libCards;
+	}
+	
+	@Override
+	public RegistReaders findCardByEmployeeAndBook(int id_employee, int id_book) {
+		RegistReaders libCard = null;
+		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
+			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE_AND_BOOK);
+			ps.setInt(1, id_employee);
+			ps.setInt(2, id_book);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				libCard = buildRegistReaders(rs);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error database connection");
+			e.printStackTrace();
+		}
+
+		return libCard;
+	}
+
 
 }

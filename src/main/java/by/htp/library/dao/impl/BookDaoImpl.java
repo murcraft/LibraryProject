@@ -129,7 +129,7 @@ public class BookDaoImpl implements BookDao {
 		return null;
 	}
 	
-	private Book buildBook(ResultSet rs) throws SQLException {
+	public Book buildBook(ResultSet rs) throws SQLException {
 		Book book = new Book();
 		book.setId(rs.getInt("id_book"));
 		book.setTitle(rs.getString("Title"));
