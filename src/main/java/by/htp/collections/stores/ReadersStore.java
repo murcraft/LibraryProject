@@ -9,7 +9,6 @@ public class ReadersStore {
 	
 	private List<Reader> readers = new ArrayList<Reader>();
 	
-
 	public ReadersStore() {
 
 	}
@@ -18,7 +17,6 @@ public class ReadersStore {
 		super();
 		this.readers = readers;
 	}
-
 
 	public List<Reader> getReaderBase() {
 		return readers;

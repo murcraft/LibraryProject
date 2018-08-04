@@ -41,9 +41,9 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 	private static final String SELECT_BYID_BOOK_CHECK = "SELECT id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_book = ? and Return_date = '1111-11-11'";
 	private static final String SELECT_BYID_READER_BOOK_CHECK = "SELECT id_reader, id_book, Take_date, Return_date FROM library.taking_book WHERE id_book = ? and id_reader = ?";
 	private static final String SELECT_ALL_LIBCARDS = "SELECT * FROM library.taking_book";
-	private static final String INSERT_LIBCARD_BYID = "INSERT INTO library.taking_book (date_start,date_end,id_book,id_employee)VALUES(?,?,?,?)";
+	private static final String INSERT_LIBCARD_BYID = "INSERT INTO library.taking_book (date_start,date_end,id_book,id_reader)VALUES(?,?,?,?)";
 	private static final String DELETE_LIBCARD_BYID = "DELETE FROM library.taking_book WHERE id_card = ?";
-	private static final String UPDATE_LIBCARD_BYID = "UPDATE library.taking_book SET date_start = ? , date_end = ? , id_book = ? , id_employee = ? WHERE id_card = ?";
+	private static final String UPDATE_LIBCARD_BYID = "UPDATE library.taking_book SET date_start = ? , date_end = ? , id_book = ? , id_reader = ? WHERE id_card = ?";
 
 	@Override
 	public RegistReaders read(int id_reader) {
@@ -152,8 +152,8 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 		RegistReaders libCard = new RegistReaders();
 		libCard.setId(resSet.getInt("id_taking_book"));
 		
-		ReaderDao emplDao = new ReaderDaoImpl();
-		Reader reader = emplDao.read(resSet.getInt("id_reader"));
+		ReaderDao readerDao = new ReaderDaoImpl();
+		Reader reader = readerDao.read(resSet.getInt("id_reader"));
 		libCard.setReader(reader);
 		
 		BookDao bookDao = new BookDaoImpl();
@@ -238,128 +238,13 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//	public Map<Reader, Map<Book, RegistReaders>> readReadersObligation(List<Reader> readersList) {
-//		calculateOverdue();
-//		ReaderDao readerDao = new ReaderDaoImpl();
-//		Reader reader = new Reader();
-//		Map<Book, RegistReaders> booksMap = new HashMap<>();
-//		Map<Reader, Map<Book, RegistReaders>> readersMap = new HashMap<>();
-//		for (Reader r : readersList) {
-//			booksMap = readReadersOver(r);
-//			if ( !booksMap.isEmpty()) {
-//				reader = readerDao.read(r.getId());
-//				readersMap.put(reader, booksMap);
-//			}
-//		}
-//		return readersMap;
-//	}
-//
-//	private List<RegistReaders> getNotReturnBooks() {
-//		List<RegistReaders> reg = new ArrayList<>();
-//
-//		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-//			PreparedStatement ps = conn.prepareStatement(SELECT_NOTRETURN_LIBCARDS);
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				reg.add(buildRegistReaders(rs));
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("Error database connection");
-//			e.printStackTrace();
-//		}
-//		return reg;
-//	}
-//
-//	@Override
-//	public Map<Book, RegistReaders> readReadersOver(Reader reader) {
-//		RegistReaders reg = null;
-//		Map<Book, RegistReaders> bookMap = new HashMap<>();
-//		
-//		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-//			PreparedStatement ps = conn.prepareStatement(SELECT_NOTRETURN_LIBCARDS_BYUSER);
-//			ps.setString(1, reader.getNum_ticket());
-//			ResultSet rs = ps.executeQuery();
-//			
-//			while (rs.next()) {	
-//				reg = buildRegistReaders(rs);
-//				bookMap.put(reg.getBook(), reg);
-//			}
-//			
-//		} catch (SQLException e) {
-//			System.out.println("Error database connection");
-//			e.printStackTrace();
-//		}
-//		return bookMap;
-//	}
-//	private boolean updateOverdue(int id_reader) {
-//		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-//			PreparedStatement ps = conn.prepareStatement(UPDATE_LIBRARUCARD_OVERDUE);
-//			ps.setInt(1, reg.getDaysOverdue());
-//			ps.setInt(2, reg.getId());
-//			
-//			if (ps.executeUpdate() == 1) {
-//				return true;
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("Error database connection");
-//			e.printStackTrace();
-//		}
-//		return false;
-//	}
-//
-//	public void calculateOverdue() {
-//		ZonedDateTime zdt1 = ZonedDateTime.now();
-//		for (RegistReaders reg : getNotReturnBooks()) {
-//			if (!reg.isReturned()) {
-//				Period period = Period.between(
-//						reg.getDateEnd().getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-//						zdt1.toLocalDate());
-//				int k = period.getDays();
-//				if (k > 0) {
-//					reg.setDaysOverdue(k);
-//					updateOverdue(reg);
-//				}
-//			}
-//		}
-//	}
-//
-//	@Override
-//	public List<RegistReaders> findByReader(int id) {
-//		List<RegistReaders> reg = new ArrayList<>();
-//		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-//			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE);
-//			ps.setInt(1, id);
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				reg.add(buildRegistReaders(rs));
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("Error database connection");
-//			e.printStackTrace();
-//		}
-//
-//		return reg;
-//	}
-//	
-//	@Override
-//	public RegistReaders getRegistReader(int id_reader, int id_book) {
-//		RegistReaders reg = null;
-//		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-//			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE_AND_BOOK);
-//			ps.setInt(1, id_reader);
-//			ps.setInt(2, id_book);
-//			ResultSet rs = ps.executeQuery();
-//			if (rs.next()) {
-//				reg = buildRegistReaders(rs);
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("Error database connection");
-//			e.printStackTrace();
-//		}
-//
-//		return reg;
-//	}
+
+	@Override
+	public Map<Reader, Map<Book, RegistReaders>> readReadersOver(List<Reader> list) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

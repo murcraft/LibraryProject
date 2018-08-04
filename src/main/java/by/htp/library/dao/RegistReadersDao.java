@@ -11,11 +11,11 @@ public interface RegistReadersDao {
 	
 	RegistReaders read(int id);
 
-	boolean insert(RegistReaders lCard);
+	boolean insert(RegistReaders reg);
 
-	boolean update(RegistReaders lCard);
+	boolean update(RegistReaders reg);
 
-	boolean delete(RegistReaders lCard);
+	boolean delete(RegistReaders reg);
 
 	List<RegistReaders> getAll();
 
@@ -28,5 +28,7 @@ public interface RegistReadersDao {
 	boolean isBookNotInLibrary(int i);
 
 	int readThreeBook(String numTicket);
+
+	Map<Reader, Map<Book, RegistReaders>> readReadersOver(List<Reader> list);
 
 }

@@ -13,7 +13,6 @@ public interface BookDao {
 
 	boolean update(Book book);
 	
-
 	List<Book> list();
 	
 

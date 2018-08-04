@@ -41,20 +41,20 @@ public class ReaderDaoImpl implements ReaderDao {
 	
 	@Override
 	public Reader read(int id) {
-		Reader employee = null;
+		Reader reader = null;
 		
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				employee = buildReader(rs);
+				reader = buildReader(rs);
 				System.out.println();
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return employee;
+		return reader;
 	}
 
 	@Override

@@ -30,21 +30,11 @@ import by.htp.library.domain.entity.RegistReaders;
 
 public class ReportDaoImpl implements ReportDao {
 	
-	private static final String SELECT_EMPLOYEE_READ_BOOK_BYMONTH = "SELECT EMPLOYEE.*, COUNT(LIBRARY_CARD.ID_EMPLOYEE) AS READED_BOOKS FROM LIBRARY_CARD JOIN EMPLOYEE ON LIBRARY_CARD.ID_EMPLOYEE = EMPLOYEE.ID_EMPLOYEE WHERE LIBRARY_CARD.isReturned > 0 AND LIBRARY_CARD.id_employee IN 		\r\n" + 
-			"		(\r\n" + 
-			"			SELECT distinct employee.id_employee FROM employee join library_card\r\n" + 
-			"			On employee.id_employee=library_card.id_employee\r\n" + 
-			"			WHERE \r\n" + 
-			"			(date_end  	BETWEEN ? AND ?)\r\n" + 
-			"			and isReturned = 1\r\n" + 
-			"		)\r\n" + 
-			"		GROUP BY EMPLOYEE.id_employee HAVING READED_BOOKS BETWEEN ? AND ?";
-	private static final String SELECT_BOOKS_READ = "SELECT BOOK.ID_BOOK, BOOK.TITLE, BOOK.QUANTITY, BOOK.ID_AUTHOR, COUNT(*) AS BOOK_TAKEDAWAY FROM LIBRARY_CARD\r\n" + 
-			"	JOIN BOOK ON LIBRARY_CARD.ID_BOOK = BOOK.ID_BOOK WHERE LIBRARY_CARD.ID_BOOK IN \r\n" + 
-			"	(\r\n" + 
-			"		SELECT DISTINCT LIBRARY_CARD.ID_BOOK FROM LIBRARY_CARD WHERE ISRETURNED > 0\r\n" + 
-			"	)\r\n" + 
-			"	GROUP BY LIBRARY_CARD.ID_BOOK ORDER BY BOOK_TAKEDAWAY DESC, BOOK.TITLE ASC";
+	private static final String SELECT_READER_BY_MONTH = "Select Reader*, COUNT(library.taking_book.id_readreE) as readers_b from library.taking_book tb join readers r"
+			+ "on tb.id_reader = readers.id_reader wher tb.Return_date <> '1111-11-11' and tb.id_reader in (SELECT distinct read.id_reader FROM library.readers read join library.taking_book tbook"
+			+ "on read.id_reader = tbook.id_reader  where (Take_date BETWEEN ? AND ?) and Return_date = '1111-11-11' group by read.id_reader HAVING Take_date between ? and ?";
+	private static final String SELECT_READ_BOOKS = "Select b.id_book, b.Title, b.Pages, b.Prod_date, count(*) as returnedbooks from library.taking_book tb join library.book b ON b.id_book = tb.id_book where tb.id_book"
+			+ "in(select select distinct id_taking_book from library.taking_book tbook where return_date <> '1111-11-11' GROUP BY tbook.id_book ORDER BY tbook.Take_date DESC, book.Title ASC";
 
 	@Override
 	public Map<Reader, Integer> booksForMonth(int min, int max) {
@@ -52,23 +42,23 @@ public class ReportDaoImpl implements ReportDao {
 		Calendar endDate = Calendar.getInstance();
 		endDate.add(Calendar.DAY_OF_MONTH, -30);
 		SimpleDateFormat formatCurrentDate = new SimpleDateFormat("yyyy-MM-dd");
-		Map<Reader, Integer> employeeMap = new HashMap<>();
+		Map<Reader, Integer> readerMap = new HashMap<>();
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = conn.prepareStatement(SELECT_EMPLOYEE_READ_BOOK_BYMONTH);
+			PreparedStatement ps = conn.prepareStatement(SELECT_READER_BY_MONTH);
 			ps.setString(1, formatCurrentDate.format(endDate.getTime()));
 			ps.setString(2, formatCurrentDate.format(currentDate.getTime()));
 			ps.setInt(3, min);
 			ps.setInt(4, max);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				employeeMap.put(buildreader(rs), rs.getInt("READED_BOOKS"));
+				readerMap.put(buildreader(rs), rs.getInt("READED_BOOKS"));
 			}
 			
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
-		return employeeMap;
+		return readerMap;
 
 	}
 
@@ -85,7 +75,7 @@ public class ReportDaoImpl implements ReportDao {
 		BookDao bookDao = new BookDaoImpl();
 		Map<Book,Integer> books = new HashMap<>();
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
-			PreparedStatement ps = conn.prepareStatement(SELECT_BOOKS_READ);
+			PreparedStatement ps = conn.prepareStatement(SELECT_READ_BOOKS);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				books.put(((BookDaoImpl)bookDao).buildBook(rs), rs.getInt("BOOK_TAKEDAWAY"));

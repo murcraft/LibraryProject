@@ -95,16 +95,6 @@ public class LogicMenu {
 			}
 		}
 	}
-//	
-//	private void checkNullBook(Book book, int id) {
-//		if(book != null) {
-//			book = bookDao.read(id);
-//			System.out.println(book);
-//		} else {
-//			System.out.println("wrong id number");
-//		}
-//	}
-
 
 	private void showLibrarianMenu(ReadingConsole readConsole) {
 		label: while (true) {
@@ -175,10 +165,6 @@ public class LogicMenu {
 			}
 		}
 		return false;
-
-	}
-
-	private static void menuReport() {
 
 	}
 
