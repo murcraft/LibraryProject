@@ -194,7 +194,6 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
-
 	}
 	
 	public Map<Reader, Map<Book, RegistReaders>> readReadersObligation(List<Reader> readersList) {
@@ -206,7 +205,7 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 		for (Reader r : readersList) {
 			booksMap = readReadersOver(r);
 			if ( !booksMap.isEmpty()) {
-				reader = readerDao.get(u.getIdUser());
+				reader = readerDao.read(r.getId());
 				readersMap.put(reader, booksMap);
 			}
 		}
@@ -283,40 +282,40 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 	}
 
 	@Override
-	public List<RegistReaders> findCardsByEmployee(int id) {
-		List<RegistReaders> libCards = new ArrayList<>();
+	public List<RegistReaders> findByReader(int id) {
+		List<RegistReaders> reg = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				libCards.add(buildRegistReaders(rs));
+				reg.add(buildRegistReaders(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 
-		return libCards;
+		return reg;
 	}
 	
 	@Override
-	public RegistReaders findCardByEmployeeAndBook(int id_employee, int id_book) {
-		RegistReaders libCard = null;
+	public RegistReaders getRegistReader(int id_reader, int id_book) {
+		RegistReaders reg = null;
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = conn.prepareStatement(SELECT_LIBCARDS_BYEMPLOYEE_AND_BOOK);
-			ps.setInt(1, id_employee);
+			ps.setInt(1, id_reader);
 			ps.setInt(2, id_book);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				libCard = buildRegistReaders(rs);
+				reg = buildRegistReaders(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println("Error database connection");
 			e.printStackTrace();
 		}
 
-		return libCard;
+		return reg;
 	}
 
 

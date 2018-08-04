@@ -59,32 +59,32 @@ public class ReaderDaoImpl implements ReaderDao {
 
 	@Override
 	public List<Reader> list() {
-		List<Reader> listEmployee = new ArrayList<Reader>();
+		List<Reader> listReader = new ArrayList<Reader>();
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(SELECT_LIST_EMPLOYEE);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				listEmployee.add(buildReader(rs));
+				listReader.add(buildReader(rs));
 			}
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
-		return listEmployee;
+		return listReader;
 	}
 	
 	@Override
-	public boolean insert(Reader employee) {
+	public boolean insert(Reader reader) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = connection.prepareStatement(INSERT_EMPLOYEE);
-			ps.setString(1, employee.getNum_ticket());
-			ps.setString(2, employee.getName());
-			ps.setString(3, employee.getSurname());
-			ps.setString(4, employee.getPhone());
-			ps.setDate(5, new Date(employee.getDateOfRegistr().getTime().getTime()));
-			ps.setString(6, employee.getPassword());
+			ps.setString(1, reader.getNum_ticket());
+			ps.setString(2, reader.getName());
+			ps.setString(3, reader.getSurname());
+			ps.setString(4, reader.getPhone());
+			ps.setDate(5, new Date(reader.getDateOfRegistr().getTime().getTime()));
+			ps.setString(6, reader.getPassword());
 			if (ps.executeUpdate() == 1) {
-				System.out.println(employee + " was inserted successfully");
+				System.out.println(reader + " was inserted successfully");
 				return true;
 			}
 		} catch (SQLIntegrityConstraintViolationException ex) {
@@ -96,10 +96,10 @@ public class ReaderDaoImpl implements ReaderDao {
 	}
 	
 	@Override
-	public boolean delete(Reader employee) {
+	public boolean delete(Reader reader) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement ps = connection.prepareStatement(DELETE_ID_EMPLOYEE);
-			ps.setInt(1, employee.getId());
+			ps.setInt(1, reader.getId());
 			if (ps.executeUpdate() == 1) {
 				return true;
 			}
@@ -110,15 +110,15 @@ public class ReaderDaoImpl implements ReaderDao {
 	}
 	
 	@Override
-	public boolean update(Reader employee) {
+	public boolean update(Reader reader) {
 		try(Connection connection = DriverManager.getConnection(getUrl(), getLogin(), getPass())){
 			PreparedStatement ps = connection.prepareStatement(UPDATE_ID_EMPLOYEE);
-			ps.setString(1, employee.getNum_ticket());
-			ps.setString(2, employee.getName());
-			ps.setString(3, employee.getSurname());
-			ps.setDate(4, new Date(employee.getDateOfRegistr().getTimeInMillis()));
-			ps.setString(5, employee.getPhone());
-			ps.setInt(6, employee.getId());
+			ps.setString(1, reader.getNum_ticket());
+			ps.setString(2, reader.getName());
+			ps.setString(3, reader.getSurname());
+			ps.setDate(4, new Date(reader.getDateOfRegistr().getTimeInMillis()));
+			ps.setString(5, reader.getPhone());
+			ps.setInt(6, reader.getId());
 			System.out.println(ps);
 			if (ps.executeUpdate() == 1) {
 				return true;
@@ -131,17 +131,17 @@ public class ReaderDaoImpl implements ReaderDao {
 	}
 	
 	private Reader buildReader(ResultSet rs) throws SQLException {
-		Reader employee = new Reader();
-		employee.setId(rs.getInt("id_reader"));
-		employee.setNum_ticket(rs.getString("Num_ticket"));
-		employee.setName(rs.getString("Name"));
-		employee.setSurname(rs.getString("Surname"));
-		employee.setPhoneNumber(rs.getString("Phone"));
-		employee.setPassword(rs.getString("Password"));
+		Reader reader = new Reader();
+		reader.setId(rs.getInt("id_reader"));
+		reader.setNum_ticket(rs.getString("Num_ticket"));
+		reader.setName(rs.getString("Name"));
+		reader.setSurname(rs.getString("Surname"));
+		reader.setPhoneNumber(rs.getString("Phone"));
+		reader.setPassword(rs.getString("Password"));
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(rs.getDate("Reg_date"));
-		employee.setDateOfRegistr(calendar);
-		return employee;
+		reader.setDateOfRegistr(calendar);
+		return reader;
 	}
 	
 	@Override

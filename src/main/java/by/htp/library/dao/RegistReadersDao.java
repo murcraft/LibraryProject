@@ -21,4 +21,8 @@ public interface RegistReadersDao {
 
 	Map<Book, RegistReaders> readReadersOver(Reader reader);
 
+	RegistReaders getRegistReader(int id_reader, int id_book);
+
+	List<RegistReaders> findByReader(int id);
+
 }
