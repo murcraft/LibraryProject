@@ -25,4 +25,8 @@ public interface RegistReadersDao {
 
 	List<RegistReaders> findByReader(int id);
 
+	boolean isBookNotInLibrary(int i);
+
+	int readThreeBook(String numTicket);
+
 }

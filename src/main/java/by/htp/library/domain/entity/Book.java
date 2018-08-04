@@ -21,6 +21,10 @@ public class Book implements Serializable {
 		this.productYear = productYear;
 	}
 	
+	public Book(int id) {
+		this.id = id;
+	}
+	
 	public Book(String title, String productYear) {
 		this.title = title;
 		this.productYear = productYear;

@@ -131,6 +131,10 @@ public class LibrarianDaoImpl implements LibrarianDao {
 			return librarian;
 
 	}
+	
+	public void getBookForReader() {
+		
+	}
 
 	@Override
 	public Librarian librarian(int id) {

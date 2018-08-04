@@ -26,7 +26,6 @@ public class RegistReadersControllerImpl implements MainController {
 	private ReadingConsole readingConsole;
 
 	public RegistReadersControllerImpl() {
-//		registReaders = new LibraryCardDaoCreator().factoryMethod();
 		bookDao = new BookDaoImpl();
 		readersDao = new ReaderDaoImpl();
 		registReadersDao = new RegistReadersDaoImpl();
@@ -70,25 +69,32 @@ public class RegistReadersControllerImpl implements MainController {
 		}
 
 	}
-	
-
-
-	@Override
-	public void showBook() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean update() {
-		// TODO Auto-generated method stub
+		System.out.println("Choose the book and enter its id number:");
+		int id_book = readingConsole.readNumber();
+		boolean isBookOnHands = registReadersDao.isBookNotInLibrary(id_book);
+		System.out.println("Enter the ticket number of reader:");
+		String numTicket = readingConsole.readLine();
+		int count = registReadersDao.readThreeBook(numTicket);
+		if(!isBookOnHands && count < 3) {
+			insert();
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean delete() {
-		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+	@Override
+	public void showBook() {
+		
+	}
+
 
 }

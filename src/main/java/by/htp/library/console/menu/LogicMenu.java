@@ -4,8 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import by.htp.library.console.ReadingConsole;
-import by.htp.library.controller.impl.BookControllerImpl;
-import by.htp.library.controller.impl.ReaderControllerImpl;
+import by.htp.library.controller.impl.*;
 import by.htp.library.dao.impl.BookDaoImpl;
 import by.htp.library.dao.impl.LibrarianDaoImpl;
 import by.htp.library.dao.impl.ReaderDaoImpl;
@@ -16,7 +15,7 @@ import by.htp.library.domain.entity.Reader;
 import by.htp.library.domain.entity.RegistReaders;
 
 public class LogicMenu {
-	private  ConsoleMenu consoleMenu = new ConsoleMenu();
+	private ConsoleMenu consoleMenu = new ConsoleMenu();
 	private ReaderDaoImpl readerDao;
 	private BookDaoImpl bookDao;
 	private ReadingConsole readConsole = new ReadingConsole();
@@ -24,8 +23,7 @@ public class LogicMenu {
 	private LibrarianDaoImpl librarianDao;
 	private BookControllerImpl bookController = new BookControllerImpl();
 	private ReaderControllerImpl readerController = new ReaderControllerImpl();
-//	private Reader reader = new Reader();
-	
+	private RegistReadersControllerImpl registReadersContr = new RegistReadersControllerImpl();
 	
 	public void checkUsers() {
 		sleep(1000);
@@ -61,8 +59,6 @@ public class LogicMenu {
 				Reader reader = readerDao.authorization(login, pass);
 				System.out.println("It's nice to meet you! " + reader.getName() + " " + reader.getSurname() + "!");
 				RegistReaders registReaders = registReadersDaoImpl.read(reader.getId());
-				System.out.println();
-
 				registReadersDaoImpl.readThreeBook(reader.getNum_ticket());
 				return true;
 			} else {
@@ -94,20 +90,20 @@ public class LogicMenu {
 			case "3":
 				break output;
 			default:
-				System.out.println("You are entered incorrect number");
-				System.out.println("Number must be 1, 2 or 3");
+				System.out.println("You are entered wrong number");
+				System.out.println("Please, enter 1, 2 or 3");
 			}
 		}
 	}
-	
-	private void checkNullBook(Book book, int id) {
-		if(book != null) {
-			book = bookDao.read(id);
-			System.out.println(book);
-		} else {
-			System.out.println("wrong id number");
-		}
-	}
+//	
+//	private void checkNullBook(Book book, int id) {
+//		if(book != null) {
+//			book = bookDao.read(id);
+//			System.out.println(book);
+//		} else {
+//			System.out.println("wrong id number");
+//		}
+//	}
 
 
 	private void showLibrarianMenu(ReadingConsole readConsole) {
@@ -130,13 +126,26 @@ public class LogicMenu {
 				} else {
 					System.out.println("Error, repeat, please");
 				}
-				break;
-			case "4":
-				break;
-			case "5":
-				readerDao.list();
 				exitMenu(readConsole);
 				break;
+			case "4":
+				if(registReadersContr.update()) {
+					System.out.println("The book was took from library");
+				} else {
+					System.out.println("The book is be reading or reader has obligations");
+				}
+				exitMenu(readConsole);
+				break;
+			case "5":
+				if(registReadersContr.insert()) {
+					System.out.println("The book was inserted");
+				} else {
+					System.out.println("Check data and try again");
+				};
+				exitMenu(readConsole);
+				break;
+			case "6":
+				break label;
 			case "7":
 				break label;
 			default:
