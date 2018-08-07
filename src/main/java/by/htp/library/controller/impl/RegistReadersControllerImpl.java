@@ -2,12 +2,10 @@ package by.htp.library.controller.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import by.htp.library.console.ReadingConsole;
 import by.htp.library.controller.MainController;
 import by.htp.library.dao.BookDao;
-import by.htp.library.dao.DaoParam;
 import by.htp.library.dao.ReaderDao;
 import by.htp.library.dao.RegistReadersDao;
 import by.htp.library.dao.impl.BookDaoImpl;
@@ -18,8 +16,7 @@ import by.htp.library.domain.entity.Reader;
 import by.htp.library.domain.entity.RegistReaders;
 
 public class RegistReadersControllerImpl implements MainController {
-	
-//	private DaoParam<RegistReaders> registReaders;
+
 	private BookDao bookDao;
 	private ReaderDao readersDao;
 	private RegistReadersDao registReadersDao;
@@ -89,7 +86,6 @@ public class RegistReadersControllerImpl implements MainController {
 	public boolean delete() {
 		return false;
 	}
-
 
 	@Override
 	public void showBook() {

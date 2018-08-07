@@ -39,6 +39,8 @@ public class LibrarianControllerImpl implements MainController {
 			Librarian librarian = new Librarian();
 			librarian.setName(name);
 			librarian.setSurname(surname);
+			librarian.setPhone(phone);
+			librarian.setPassword(pass);
 		if (librarianDao.insert(librarian)) {
 			System.out.println("Reader was added successfully");
 			return true;
@@ -63,6 +65,8 @@ public class LibrarianControllerImpl implements MainController {
 		String surname = readerConsole.readLine();
 		System.out.println("Enter the phone number of reader in format 80XXXXXXXXX");
 		String phone = readerConsole.readLine();
+		System.out.println("Enter the password(no less 6 digits and 1 letter)");
+		String pass = readerConsole.readLine();
 		System.out.println("Enter rhe date of registration in format YYYY-MM-DD");
 		try {
 			Calendar dateReg = Calendar.getInstance();
@@ -70,8 +74,11 @@ public class LibrarianControllerImpl implements MainController {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
 			dateReg.setTime(dateFormat.parse(date));
 			Librarian librarian = new Librarian();
+			librarian.setLogin(num_ticket);
 			librarian.setName(name);
 			librarian.setSurname(surname);
+			librarian.setPhone(phone);
+			librarian.setPassword(pass);
 			if (librarianDao.insert(librarian)) {
 				System.out.println("Reader was updated successfully");
 				return true;

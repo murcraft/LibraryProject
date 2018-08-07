@@ -3,7 +3,7 @@ package by.htp.library.console;
 import java.util.Scanner;
 
 public class ReadingConsole {
-	Scanner scanner;
+	public Scanner scanner;
 
 	public ReadingConsole() {
 		this.scanner = new Scanner(System.in, "utf-8");
@@ -28,6 +28,10 @@ public class ReadingConsole {
 		scanner.hasNext();
 		string += scanner.nextLine();
 		return string;
+	}
+	
+	public void closeScanner() {
+		scanner.close();
 	}
 
 }

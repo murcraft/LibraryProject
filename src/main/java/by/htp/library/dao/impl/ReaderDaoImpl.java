@@ -16,8 +16,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import by.htp.library.console.ReadingConsole;
-import by.htp.library.controller.factory.ReaderController;
-import by.htp.library.controller.impl.ReaderControllerImpl;
 import by.htp.library.dao.DaoParam;
 import by.htp.library.dao.ReaderDao;
 import by.htp.library.domain.entity.Reader;
@@ -30,7 +28,6 @@ public class ReaderDaoImpl implements ReaderDao {
 	private static final String DELETE_ID_EMPLOYEE = "DELETE from library.reader where Num_ticket = ?";
 	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.readers SET id_employee = ?, Name = ?, Surname = ?, Reg_date = ?, Phone = ? where Num_ticket = ?";
 	private static final String SELECT_LOGIN = "SELECT id_reader, Num_ticket, Name, Surname, Reg_date, Phone, Password FROM library.readers r WHERE r.Num_ticket = ? and r.Password = ?";
-	private static final String SELECT_PASS = "SELECT Password FROM library.readers r WHERE r.Num_ticket = ? and r.Password = ?";
 	
 	private DaoParam<Reader> userDao;
 	private ReadingConsole readingConsole;

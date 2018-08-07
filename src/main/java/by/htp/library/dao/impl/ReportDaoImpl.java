@@ -10,14 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import by.htp.library.dao.BookDao;
@@ -77,17 +71,15 @@ public class ReportDaoImpl implements ReportDao {
 		try (Connection conn = DriverManager.getConnection(getUrl(), getLogin(), getPass())) {
 			PreparedStatement ps = conn.prepareStatement(SELECT_READ_BOOKS);
 			ResultSet rs = ps.executeQuery();
+
 			while (rs.next()) {
 				books.put(((BookDaoImpl)bookDao).buildBook(rs), rs.getInt("BOOK_TAKEDAWAY"));
 			}
-			
-		} catch (SQLException e) {
 
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return books;
-
 	}
 
 	@Override
@@ -97,7 +89,5 @@ public class ReportDaoImpl implements ReportDao {
 		return registReaders.readReadersOver(readerDao.list());
 	}
 	
-
-
 
 }

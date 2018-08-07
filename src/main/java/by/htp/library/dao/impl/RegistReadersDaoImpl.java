@@ -223,25 +223,21 @@ public class RegistReadersDaoImpl implements RegistReadersDao {
 
 	@Override
 	public Map<Book, RegistReaders> readReadersOver(Reader reader) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public RegistReaders getRegistReader(int id_reader, int id_book) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<RegistReaders> findByReader(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<Reader, Map<Book, RegistReaders>> readReadersOver(List<Reader> list) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

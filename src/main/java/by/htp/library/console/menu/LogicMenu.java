@@ -9,7 +9,6 @@ import by.htp.library.dao.impl.BookDaoImpl;
 import by.htp.library.dao.impl.LibrarianDaoImpl;
 import by.htp.library.dao.impl.ReaderDaoImpl;
 import by.htp.library.dao.impl.RegistReadersDaoImpl;
-import by.htp.library.domain.entity.Book;
 import by.htp.library.domain.entity.Librarian;
 import by.htp.library.domain.entity.Reader;
 import by.htp.library.domain.entity.RegistReaders;

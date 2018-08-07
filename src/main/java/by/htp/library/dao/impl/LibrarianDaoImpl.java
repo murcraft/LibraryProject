@@ -22,7 +22,7 @@ public class LibrarianDaoImpl implements LibrarianDao {
 	private static final String SELECT_LIBRARIAN_BY_ID = "SELECT * FROM library.librarian l WHERE l.id_librarian = ?";
 	private static final String SELECT_LIST_LIBRARIANS = "SELECT * FROM library.librarian";
 	private static final String INSERT_LIBRARIAN = "INSERT INTO library.librarian(id_librarian, Num_ticket, Name, Surname, Password, Reg_date, Phone) VALUES(?,?,?,?,?,?,?)";
-	private static final String LIBRARIAN = "DELETE from library.librarian where id_librarian = ?";
+	private static final String DELETE_LIBRARIAN = "DELETE from library.librarian where id_librarian = ?";
 	private static final String UPDATE_ID_EMPLOYEE = "UPDATE library.librarian SET id_librarian = ?, Num_ticket = ?, Name = ?, Surname = ?, Password = ?, Reg_date = ?, Phone = ? where id_librarian = ?";
 	private static final String SELECT_LOGIN = "SELECT id_librarian, Num_ticket, Name, Surname, Password, Reg_date, Phone FROM library.librarian r WHERE r.Num_ticket = ? and r.Password = ?";
 	
@@ -138,19 +138,16 @@ public class LibrarianDaoImpl implements LibrarianDao {
 
 	@Override
 	public Librarian librarian(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean delete(Librarian librarian) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Librarian librarian) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
